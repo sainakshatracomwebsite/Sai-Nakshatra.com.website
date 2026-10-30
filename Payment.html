@@ -222,12 +222,27 @@ try {
     planPrice.textContent = "₹" + plan.price;
 
     button.disabled = false;
-    button.textContent = "Payment Coming Soon";
+button.textContent = "Pay ₹" + plan.price + " (Demo)";
 
-    button.addEventListener("click", () => {
-      message.textContent =
-        "Payment is not active yet. No money has been charged.";
-    });
+button.addEventListener("click", () => {
+  sessionStorage.setItem(
+    "saiNakshatraDemoPayment",
+    JSON.stringify({
+      plan: plan.name,
+      amount: plan.price,
+      status: "demo-success"
+    })
+  );
+
+  message.textContent =
+    "Demo payment successful! No real money was charged.";
+
+  button.textContent = "Continue to Birth Details";
+
+  button.onclick = () => {
+    window.location.href = "Birth-details.html";
+  };
+});
   }
 
 } catch (error) {
