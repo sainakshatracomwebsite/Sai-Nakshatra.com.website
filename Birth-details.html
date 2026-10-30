@@ -218,7 +218,7 @@ const birthDate = document.getElementById("birthDate");
 // Prevent future birth dates.
 birthDate.max = new Date().toISOString().split("T")[0];
 
-form.addEventListener("submit", function(event) {
+form.addEventListener("submit", async function(event) {
   event.preventDefault();
 
   const details = {
