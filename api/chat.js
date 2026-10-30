@@ -34,7 +34,8 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    const message = req.body && req.body.message;
+    const body = req.body || {};
+    const message = body.message;
 
     if (
       typeof message !== "string" ||
@@ -46,34 +47,88 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    // Accept only a small, validated conversation history.
+    const history = Array.isArray(body.history)
+      ? body.history
+          .filter(item =>
+            item &&
+            ["user", "assistant"].includes(item.role) &&
+            typeof item.content === "string" &&
+            item.content.trim().length > 0 &&
+            item.content.length <= 2000
+          )
+          .slice(-8)
+          .map(item => ({
+            role: item.role,
+            content: item.content.trim()
+          }))
+      : [];
+
+    const systemPrompt = `
+You are Sai Nakshatra AI, a helpful general-purpose
+assistant with an additional focus on traditional astrology.
+
+GENERAL INTELLIGENCE:
+- Answer questions about science, technology, education,
+  mathematics, history, business and everyday topics.
+- Do not restrict yourself to astrology.
+- Explain difficult topics in simple language.
+- Give useful, direct and well-structured answers.
+- If you do not know something, be honest.
+- Never invent facts, sources or calculations.
+
+ASTROLOGY:
+- Help users understand Rashi, Nakshatra, Pada,
+  birth charts and traditional horoscope interpretations.
+- Treat astrology as a traditional belief system,
+  not scientifically proven prediction.
+- Never promise guaranteed future events.
+- Do not invent birth-chart calculations or planetary positions.
+- Ask for missing information when necessary.
+
+CONVERSATION:
+- Understand the recent conversation history.
+- Remember the context provided in the current conversation.
+- Answer follow-up questions naturally.
+- Avoid unnecessary repetition.
+
+SAFETY:
+- Be respectful and age-appropriate.
+- Protect personal information.
+- Never encourage dangerous decisions.
+- Do not replace professional medical, legal or financial advice.
+
+IDENTITY:
+- Your name is Sai Nakshatra AI.
+- Be clear, friendly, useful and honest.
+`;
+
     const response = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
         method: "POST",
         headers: {
-  "Content-Type": "application/json",
-  "Authorization": "Bearer " + apiKey,
-  "HTTP-Referer": "https://sainakshatracomwebsite.github.io",
-  "X-Title": "Sai Nakshatra"
-},
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + apiKey,
+          "HTTP-Referer":
+            "https://sainakshatracomwebsite.github.io",
+          "X-Title": "Sai Nakshatra"
+        },
         body: JSON.stringify({
           model: "openrouter/free",
           messages: [
-  {
-    role: "system",
-    content:
-      "You are the Sai Nakshatra guidance assistant. " +
-      "Be respectful, supportive, clear and age-appropriate. " +
-      "Astrology is a traditional belief system, not a scientifically " +
-      "proven way to predict the future. Never present predictions " +
-      "as guaranteed facts. Encourage thoughtful personal decisions."
-  },
-  {
-    role: "user",
-    content: message.trim()
-  }
-],
-          max_tokens: 400
+            {
+              role: "system",
+              content: systemPrompt
+            },
+            ...history,
+            {
+              role: "user",
+              content: message.trim()
+            }
+          ],
+          max_tokens: 700,
+          temperature: 0.6
         }),
         signal: AbortSignal.timeout(30000)
       }
@@ -82,15 +137,27 @@ module.exports = async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenRouter API error:", data.error?.message);
+      console.error(
+        "OpenRouter API error:",
+        data.error?.message || "Unknown error"
+      );
+
       return res.status(502).json({
-        error: "The AI service could not complete your request."
+        error: "The AI service is temporarily unavailable. Please try again."
+      });
+    }
+
+    const reply = data.choices?.[0]?.message?.content;
+
+    if (typeof reply !== "string" || !reply.trim()) {
+      return res.status(502).json({
+        error: "The AI returned an empty response. Please try again."
       });
     }
 
     return res.status(200).json({
-  reply: data.choices?.[0]?.message?.content || "I couldn't generate a reply. Please try again."
-});
+      reply: reply.trim()
+    });
 
   } catch (error) {
     console.error("Chat API error:", error.message);
@@ -100,4 +167,5 @@ module.exports = async function handler(req, res) {
     });
   }
 };
+      
   
