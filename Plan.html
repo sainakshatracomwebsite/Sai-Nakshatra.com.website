@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b20">
+<title>Choose Your Journey | Sai Nakshatra</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Georgia, serif;
+  color: white;
+  background:
+    radial-gradient(ellipse at top, #192d55, transparent 60%),
+    linear-gradient(145deg, #030817, #09132c, #05091b);
+  padding: 25px 18px 60px;
+}
+
+header {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: #f0d18a;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.back {
+  color: #d5dff0;
+  text-decoration: none;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.hero {
+  text-align: center;
+  padding: 75px 10px 45px;
+}
+
+.eyebrow {
+  color: #e5c67d;
+  font: 11px Arial, sans-serif;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: clamp(36px, 7vw, 55px);
+  font-weight: normal;
+  background: linear-gradient(100deg, #fff, #e8cd8a, #a9d3ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.hero p {
+  color: #bac8df;
+  font: 15px/1.8 Arial, sans-serif;
+  margin-top: 20px;
+}
+
+.plans {
+  max-width: 1050px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.plan {
+  position: relative;
+  padding: 35px 23px;
+  border: 1px solid #ffffff25;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #ffffff14, #ffffff05);
+  backdrop-filter: blur(15px);
+  display: flex;
+  flex-direction: column;
+  transition: .3s;
+}
+
+.plan:hover {
+  transform: translateY(-7px);
+  border-color: #d9bd7b;
+}
+
+.featured {
+  border-color: #e2c47e;
+  box-shadow: 0 0 30px #d9bd7b20;
+}
+
+.tag {
+  color: #f1d28c;
+  font: bold 10px Arial, sans-serif;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #f0d18a;
+  font-size: 26px;
+  font-weight: normal;
+}
+
+.price {
+  font: bold 42px Arial, sans-serif;
+  margin: 18px 0;
+  color: white;
+}
+
+.price small {
+  font-size: 16px;
+  color: #bdc8dc;
+}
+
+.description {
+  color: #b9c6dc;
+  font: 14px/1.7 Arial, sans-serif;
+  min-height: 70px;
+}
+
+ul {
+  list-style: none;
+  margin: 22px 0 30px;
+  flex-grow: 1;
+}
+
+li {
+  color: #d5deed;
+  font: 13px/1.7 Arial, sans-serif;
+  margin: 12px 0;
+}
+
+li::before {
+  content: "✦ ";
+  color: #e8ca83;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #e2c47e;
+  border-radius: 30px;
+  background: transparent;
+  color: #f0d18a;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+button:hover {
+  background: #e2c47e;
+  color: #09132c;
+}
+
+.featured button {
+  background: linear-gradient(100deg, #d4b36b, #f3dda1);
+  color: #09132c;
+}
+
+.note {
+  max-width: 650px;
+  margin: 40px auto 0;
+  text-align: center;
+  color: #8fa1bf;
+  font: 12px/1.8 Arial, sans-serif;
+}
+
+@media(max-width: 750px) {
+  .plans {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+
+  .hero {
+    padding-top: 55px;
+  }
+
+  .description {
+    min-height: auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✦ Sai Nakshatra</div>
+  <a class="back" href="index.html">← Back to Home</a>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">YOUR JOURNEY BEGINS HERE</div>
+  <h1>Choose Your Journey</h1>
+  <p>
+    Select an experience that suits your curiosity.
+    Every journey begins with a single step.
+  </p>
+</section>
+
+<main class="plans">
+
+  <article class="plan">
+    <div class="tag">THE BEGINNING</div>
+    <h2>Starter</h2>
+    <div class="price">₹1</div>
+    <p class="description">
+      A simple introduction to your
+      astrological journey.
+    </p>
+    <ul>
+      <li>Basic birth profile</li>
+      <li>Introductory guidance</li>
+      <li>Short AI experience</li>
+    </ul>
+    <button onclick="selectPlan('Starter', 1)">
+      Choose Starter
+    </button>
+  </article>
+
+  <article class="plan featured">
+    <div class="tag">POPULAR EXPERIENCE</div>
+    <h2>Explorer</h2>
+    <div class="price">₹19</div>
+    <p class="description">
+      Explore your cosmic profile
+      with a deeper experience.
+    </p>
+    <ul>
+      <li>Detailed birth profile</li>
+      <li>Deeper astrological insights</li>
+      <li>Extended AI experience</li>
+    </ul>
+    <button onclick="selectPlan('Explorer', 19)">
+      Choose Explorer
+    </button>
+  </article>
+
+  <article class="plan">
+    <div class="tag">EXTENDED EXPERIENCE</div>
+    <h2>Premium</h2>
+    <div class="price">₹49</div>
+    <p class="description">
+      An extended journey into
+      your astrological profile.
+    </p>
+    <ul>
+      <li>Extended birth profile</li>
+      <li>Expanded astrological insights</li>
+      <li>Extended AI experience</li>
+    </ul>
+    <button onclick="selectPlan('Premium', 49)">
+      Choose Premium
+    </button>
+  </article>
+
+</main>
+
+<div class="note">
+  Sai Nakshatra | Your Direction for Tomorrow<br>
+  Plan selection does not constitute payment.
+</div>
+
+<script>
+function selectPlan(name, price) {
+  sessionStorage.setItem(
+    "saiNakshatraSelectedPlan",
+    JSON.stringify({ name, price })
+  );
+
+  window.location.href = "Payment.html";
+}
+</script>
+
+</body>
+</html>
