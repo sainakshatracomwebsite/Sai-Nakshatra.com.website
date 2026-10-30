@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b20">
+<title>Your Results | Sai Nakshatra</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  padding: 25px 18px;
+  font-family: Georgia, serif;
+  color: white;
+  background:
+    radial-gradient(ellipse at top, #192d55, transparent 60%),
+    linear-gradient(145deg, #030817, #09132c, #05091b);
+}
+
+header {
+  max-width: 900px;
+  margin: auto;
+}
+
+.logo {
+  color: #f0d18a;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+main {
+  max-width: 650px;
+  margin: 50px auto;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.heading span {
+  color: #e5c67d;
+  font: 11px Arial, sans-serif;
+  letter-spacing: 4px;
+}
+
+h1 {
+  color: #f0d18a;
+  font-size: 34px;
+  font-weight: normal;
+  margin: 15px 0;
+}
+
+.heading p {
+  color: #b9c6dc;
+  font: 14px/1.7 Arial, sans-serif;
+}
+
+.card {
+  padding: 25px;
+  margin-bottom: 20px;
+  border: 1px solid #ffffff25;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #ffffff14, #ffffff05);
+  box-shadow: 0 15px 40px #0004;
+}
+
+h2 {
+  color: #f0d18a;
+  font-size: 21px;
+  font-weight: normal;
+  margin-bottom: 20px;
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 13px 0;
+  border-bottom: 1px solid #ffffff18;
+  font: 14px Arial, sans-serif;
+}
+
+.detail:last-child {
+  border-bottom: none;
+}
+
+.detail span:first-child {
+  color: #aebbd2;
+}
+
+.detail span:last-child {
+  color: white;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.premium-item {
+  padding: 18px;
+  margin-top: 12px;
+  border: 1px solid #ffffff20;
+  border-radius: 12px;
+  background: #ffffff08;
+}
+
+.premium-item h3 {
+  color: #f0d18a;
+  font-size: 17px;
+  font-weight: normal;
+  margin-bottom: 8px;
+}
+
+.premium-item p,
+.info {
+  color: #b9c6dc;
+  font: 13px/1.7 Arial, sans-serif;
+}
+
+.notice {
+  text-align: center;
+  color: #f0d18a;
+  font: 13px/1.7 Arial, sans-serif;
+  margin-top: 18px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(100deg, #d4b36b, #f3dda1);
+  color: #09132c;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.error {
+  text-align: center;
+  color: #ffd0d0;
+  font: 14px/1.7 Arial, sans-serif;
+}
+
+footer {
+  text-align: center;
+  color: #8495b2;
+  font: 12px Arial, sans-serif;
+  padding: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✦ Sai Nakshatra</div>
+</header>
+
+<main>
+
+  <section class="heading">
+    <span>YOUR COSMIC JOURNEY</span>
+    <h1>Your Results</h1>
+    <p>Your selected experience and birth profile.</p>
+  </section>
+
+  <section class="card" id="profileCard">
+    <h2>Birth Profile</h2>
+
+    <div class="detail">
+      <span>Name</span>
+      <span id="resultName">Loading...</span>
+    </div>
+
+    <div class="detail">
+      <span>Date of Birth</span>
+      <span id="resultDate">Loading...</span>
+    </div>
+
+    <div class="detail">
+      <span>Birth Time</span>
+      <span id="resultTime">Loading...</span>
+    </div>
+
+    <div class="detail">
+      <span>Birthplace</span>
+      <span id="resultPlace">Loading...</span>
+    </div>
+
+    <div class="detail">
+      <span>Selected Plan</span>
+      <span id="resultPlan">Loading...</span>
+    </div>
+  </section>
+
+  <section class="card hidden" id="premiumReport">
+    <h2>Premium Astrology Report</h2>
+
+    <div class="premium-item">
+      <h3>Rashi</h3>
+      <p id="rashi">Calculation not connected yet.</p>
+    </div>
+
+    <div class="premium-item">
+      <h3>Nakshatra</h3>
+      <p id="nakshatra">Calculation not connected yet.</p>
+    </div>
+
+    <div class="premium-item">
+      <h3>Pada</h3>
+      <p id="pada">Calculation not connected yet.</p>
+    </div>
+
+    <div class="premium-item">
+      <h3>Birth Chart</h3>
+      <p>Birth chart calculation will be connected here.</p>
+    </div>
+
+    <div class="premium-item">
+      <h3>Personal Horoscope</h3>
+      <p>Personal horoscope generation will be connected here.</p>
+    </div>
+
+    <p class="notice">
+      Your premium report is waiting for the astrology engine.
+    </p>
+  </section>
+
+  <section class="card hidden" id="upgradeCard">
+    <h2>Explore Premium</h2>
+    <p class="info">
+      Rashi, Nakshatra, Pada, birth chart and personal horoscope
+      are included in the Premium ₹49 experience.
+    </p>
+
+    <button onclick="window.location.href='Plan.html'">
+      Explore Premium ✨
+    </button>
+  </section>
+
+  <p class="error hidden" id="errorMessage"></p>
+
+  <footer>
+    Sai Nakshatra | Your Direction for Tomorrow
+  </footer>
+
+</main>
+
+<script>
+const birthDetails = JSON.parse(
+  sessionStorage.getItem("saiNakshatraBirthDetails") || "null"
+);
+
+const selectedPlan = JSON.parse(
+  sessionStorage.getItem("saiNakshatraSelectedPlan") || "null"
+);
+
+const validPlans = {
+  Starter: 1,
+  Explorer: 19,
+  Premium: 49
+};
+
+const errorMessage = document.getElementById("errorMessage");
+
+if (
+  !birthDetails ||
+  !selectedPlan ||
+  validPlans[selectedPlan.name] !== selectedPlan.price
+) {
+  document.getElementById("profileCard").classList.add("hidden");
+
+  errorMessage.textContent =
+    "Birth details or selected plan could not be found. Please return and try again.";
+
+  errorMessage.classList.remove("hidden");
+
+} else {
+
+  document.getElementById("resultName").textContent =
+    birthDetails.fullName || "Not provided";
+
+  document.getElementById("resultDate").textContent =
+    birthDetails.birthDate || "Not provided";
+
+  document.getElementById("resultTime").textContent =
+    birthDetails.birthTime || "Not provided";
+
+  document.getElementById("resultPlace").textContent =
+    birthDetails.birthPlace || "Not provided";
+
+  document.getElementById("resultPlan").textContent =
+    selectedPlan.name + " - ₹" + selectedPlan.price;
+
+  if (selectedPlan.name === "Premium") {
+    document.getElementById("premiumReport")
+      .classList.remove("hidden");
+  } else {
+    document.getElementById("upgradeCard")
+      .classList.remove("hidden");
+  }
+}
+</script>
+
+</body>
+  </html>
+  
