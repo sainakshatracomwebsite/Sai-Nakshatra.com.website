@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b20">
+<title>Birth Details | Sai Nakshatra</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  padding: 25px 18px;
+  font-family: Georgia, serif;
+  color: white;
+  background:
+    radial-gradient(ellipse at top, #192d55, transparent 60%),
+    linear-gradient(145deg, #030817, #09132c, #05091b);
+}
+
+header {
+  max-width: 900px;
+  margin: auto;
+}
+
+.logo {
+  color: #f0d18a;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+main {
+  max-width: 500px;
+  margin: 55px auto;
+  padding: 32px 24px;
+  border: 1px solid #ffffff25;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #ffffff14, #ffffff05);
+  box-shadow: 0 15px 50px #0005;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.heading span {
+  color: #e5c67d;
+  font: 11px Arial, sans-serif;
+  letter-spacing: 4px;
+}
+
+h1 {
+  color: #f0d18a;
+  font-size: 32px;
+  font-weight: normal;
+  margin: 15px 0;
+}
+
+.heading p {
+  color: #b9c6dc;
+  font: 14px/1.7 Arial, sans-serif;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  color: #e5c67d;
+  font: 13px Arial, sans-serif;
+  margin-bottom: 9px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ffffff30;
+  border-radius: 10px;
+  background: #ffffff0b;
+  color: white;
+  font-size: 15px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #e5c67d;
+}
+
+input::placeholder {
+  color: #8495b2;
+}
+
+input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(1);
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(100deg, #d4b36b, #f3dda1);
+  color: #09132c;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+.message {
+  color: #f0d18a;
+  text-align: center;
+  font: 13px/1.7 Arial, sans-serif;
+  margin-top: 18px;
+}
+
+.note {
+  color: #9eacc4;
+  font: 11px/1.6 Arial, sans-serif;
+  text-align: center;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✦ Sai Nakshatra</div>
+</header>
+
+<main>
+
+  <section class="heading">
+    <span>YOUR COSMIC JOURNEY</span>
+    <h1>Birth Details</h1>
+    <p>Enter your birth information to continue your journey.</p>
+  </section>
+
+  <form id="birthForm">
+
+    <div class="field">
+      <label for="fullName">Full Name</label>
+      <input
+        type="text"
+        id="fullName"
+        placeholder="Enter your name"
+        maxlength="80"
+        required
+      >
+    </div>
+
+    <div class="field">
+      <label for="birthDate">Date of Birth</label>
+      <input
+        type="date"
+        id="birthDate"
+        required
+      >
+    </div>
+
+    <div class="field">
+      <label for="birthTime">Time of Birth</label>
+      <input
+        type="time"
+        id="birthTime"
+        required
+      >
+    </div>
+
+    <div class="field">
+      <label for="birthPlace">Birthplace</label>
+      <input
+        type="text"
+        id="birthPlace"
+        placeholder="City, State, Country"
+        maxlength="120"
+        required
+      >
+    </div>
+
+    <button type="submit" id="continueBtn">
+      Continue ✨
+    </button>
+
+    <p class="message" id="message"></p>
+
+    <p class="note">
+      Demo version: details are stored in this browser tab
+      for the current session. Do not enter real personal
+      information until the website has appropriate privacy
+      and security protections.
+    </p>
+
+  </form>
+
+</main>
+
+<script>
+const form = document.getElementById("birthForm");
+const message = document.getElementById("message");
+const continueBtn = document.getElementById("continueBtn");
+const birthDate = document.getElementById("birthDate");
+
+// Prevent future birth dates.
+birthDate.max = new Date().toISOString().split("T")[0];
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const details = {
+    fullName: document.getElementById("fullName").value.trim(),
+    birthDate: birthDate.value,
+    birthTime: document.getElementById("birthTime").value,
+    birthPlace: document.getElementById("birthPlace").value.trim()
+  };
+
+  if (
+    !details.fullName ||
+    !details.birthDate ||
+    !details.birthTime ||
+    !details.birthPlace
+  ) {
+    message.textContent = "Please complete all fields.";
+    return;
+  }
+
+  try {
+    sessionStorage.setItem(
+      "saiNakshatraBirthDetails",
+      JSON.stringify(details)
+    );
+
+    message.textContent = "Details saved successfully!";
+
+    continueBtn.disabled = true;
+    continueBtn.textContent = "Continuing...";
+
+    window.location.href = "Result.html";
+
+  } catch (error) {
+    message.textContent =
+      "Unable to save your details. Please try again.";
+    continueBtn.disabled = false;
+    continueBtn.textContent = "Continue ✨";
+  }
+});
+</script>
+
+</body>
+</html>
