@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b20">
+<title>Payment | Sai Nakshatra</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  padding: 25px 18px;
+  font-family: Georgia, serif;
+  color: white;
+  background:
+    radial-gradient(ellipse at top, #192d55, transparent 60%),
+    linear-gradient(145deg, #030817, #09132c, #05091b);
+}
+
+header {
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: #f0d18a;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.back {
+  color: #d5dff0;
+  text-decoration: none;
+  font: 14px Arial, sans-serif;
+}
+
+main {
+  max-width: 480px;
+  margin: 75px auto;
+  padding: 35px 25px;
+  border: 1px solid #ffffff25;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #ffffff14, #ffffff05);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 15px 50px #0005;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.heading span {
+  color: #e5c67d;
+  font: 11px Arial, sans-serif;
+  letter-spacing: 4px;
+}
+
+h1 {
+  color: #f0d18a;
+  font-size: 34px;
+  font-weight: normal;
+  margin: 15px 0;
+}
+
+.heading p {
+  color: #b9c6dc;
+  font: 14px/1.7 Arial, sans-serif;
+}
+
+.summary {
+  padding: 22px;
+  border: 1px solid #ffffff20;
+  border-radius: 15px;
+  margin-bottom: 25px;
+}
+
+.summary p {
+  color: #aebbd2;
+  font: 13px Arial, sans-serif;
+}
+
+.plan-name {
+  color: white;
+  font-size: 22px;
+  margin: 10px 0;
+}
+
+.price {
+  color: #f0d18a;
+  font: bold 38px Arial, sans-serif;
+}
+
+.notice {
+  color: #c3cee0;
+  font: 13px/1.7 Arial, sans-serif;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(100deg, #d4b36b, #f3dda1);
+  color: #09132c;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.message {
+  color: #f0d18a;
+  text-align: center;
+  font: 13px/1.7 Arial, sans-serif;
+  margin-top: 20px;
+}
+
+footer {
+  text-align: center;
+  color: #8495b2;
+  font: 12px Arial, sans-serif;
+  margin-top: 35px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✦ Sai Nakshatra</div>
+  <a href="Plan.html" class="back">← Back to Plans</a>
+</header>
+
+<main>
+
+  <section class="heading">
+    <span>YOUR JOURNEY CONTINUES</span>
+    <h1>Order Summary</h1>
+    <p>Review your selected experience.</p>
+  </section>
+
+  <section class="summary">
+    <p>YOUR SELECTED PLAN</p>
+    <div class="plan-name" id="planName">Loading...</div>
+    <div class="price" id="planPrice">₹--</div>
+  </section>
+
+  <p class="notice" id="notice">
+    Your plan selection is ready.
+    Payment is not yet enabled.
+  </p>
+
+  <button id="continueBtn" disabled>
+    Payment Coming Soon
+  </button>
+
+  <p class="message" id="message"></p>
+
+  <footer>
+    Secure payment integration will be added before launch.
+  </footer>
+
+</main>
+
+<script>
+const planName = document.getElementById("planName");
+const planPrice = document.getElementById("planPrice");
+const notice = document.getElementById("notice");
+const message = document.getElementById("message");
+const button = document.getElementById("continueBtn");
+
+try {
+  const savedPlan = sessionStorage.getItem(
+    "saiNakshatraSelectedPlan"
+  );
+
+  if (!savedPlan) {
+    planName.textContent = "No plan selected";
+    planPrice.textContent = "₹--";
+    notice.textContent = "Please select a plan first.";
+    button.disabled = false;
+    button.textContent = "Choose a Plan";
+
+    button.addEventListener("click", () => {
+      window.location.href = "Plan.html";
+    });
+
+  } else {
+    const plan = JSON.parse(savedPlan);
+
+    const validPlans = {
+      Starter: 1,
+      Explorer: 19,
+      Premium: 49
+    };
+
+    if (
+      !plan ||
+      validPlans[plan.name] !== plan.price
+    ) {
+      throw new Error("Invalid plan information");
+    }
+
+    planName.textContent = plan.name;
+    planPrice.textContent = "₹" + plan.price;
+
+    button.disabled = false;
+    button.textContent = "Payment Coming Soon";
+
+    button.addEventListener("click", () => {
+      message.textContent =
+        "Payment is not active yet. No money has been charged.";
+    });
+  }
+
+} catch (error) {
+  planName.textContent = "Unable to load plan";
+  planPrice.textContent = "₹--";
+  notice.textContent = "Please return and select your plan again.";
+  button.textContent = "Back to Plans";
+  button.disabled = false;
+
+  button.addEventListener("click", () => {
+    window.location.href = "Plan.html";
+  });
+}
+</script>
+
+</body>
+  </html>
+  
