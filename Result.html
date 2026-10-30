@@ -307,7 +307,16 @@ if (
 
   document.getElementById("resultPlan").textContent =
     selectedPlan.name + " - ₹" + selectedPlan.price;
+if (selectedPlan.name === "Premium" && calculation?.success) {
+  document.getElementById("rashi").textContent =
+    calculation.rashi || "Not available";
 
+  document.getElementById("nakshatra").textContent =
+    calculation.nakshatra || "Not available";
+
+  document.getElementById("pada").textContent =
+    calculation.pada || "Not available";
+  }
   if (selectedPlan.name === "Premium") {
     document.getElementById("premiumReport")
       .classList.remove("hidden");
