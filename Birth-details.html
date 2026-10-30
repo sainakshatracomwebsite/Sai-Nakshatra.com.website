@@ -239,10 +239,43 @@ form.addEventListener("submit", function(event) {
   }
 
   try {
-    sessionStorage.setItem(
-      "saiNakshatraBirthDetails",
-      JSON.stringify(details)
-    );
+    const response = await fetch(
+  "https://sai-nakshatracomwebsite.vercel.app/api/calculate",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      birthDate: details.birthDate,
+      birthTime: details.birthTime,
+      birthPlace: details.birthPlace
+    })
+  }
+);
+
+const result = await response.json();
+
+if (!response.ok || !result.success) {
+  throw new Error(result.error || "Calculation failed.");
+}
+
+sessionStorage.setItem(
+  "saiNakshatraBirthDetails",
+  JSON.stringify(details)
+);
+
+sessionStorage.setItem(
+  "saiNakshatraCalculation",
+  JSON.stringify(result)
+);
+
+message.textContent = "Birth details calculated successfully!";
+
+continueBtn.disabled = true;
+continueBtn.textContent = "Continuing...";
+
+window.location.href = "Result.html";
 
     message.textContent = "Details saved successfully!";
 
