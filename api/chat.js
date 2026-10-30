@@ -87,8 +87,8 @@ module.exports = async function handler(req, res) {
     }
 
     return res.status(200).json({
-      reply: data.output_text || "I couldn't generate a reply. Please try again."
-    });
+  reply: data.choices?.[0]?.message?.content || "I couldn't generate a reply. Please try again."
+});
 
   } catch (error) {
     console.error("Chat API error:", error.message);
