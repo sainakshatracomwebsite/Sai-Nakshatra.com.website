@@ -51,9 +51,11 @@ module.exports = async function handler(req, res) {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + apiKey
-        },
+  "Content-Type": "application/json",
+  "Authorization": "Bearer " + apiKey,
+  "HTTP-Referer": "https://sainakshatracomwebsite.github.io",
+  "X-Title": "Sai Nakshatra"
+},
         body: JSON.stringify({
           model: "openrouter/free",
           messages: [
