@@ -55,7 +55,7 @@ module.exports = async function handler(req, res) {
           "Authorization": "Bearer " + apiKey
         },
         body: JSON.stringify({
-          model: "gpt-5.5",
+          model: "openrouter/free",
           instructions:
             "You are the Sai Nakshatra guidance assistant. " +
             "Be respectful, supportive, clear and age-appropriate. " +
