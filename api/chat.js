@@ -56,15 +56,22 @@ module.exports = async function handler(req, res) {
         },
         body: JSON.stringify({
           model: "openrouter/free",
-          instructions:
-            "You are the Sai Nakshatra guidance assistant. " +
-            "Be respectful, supportive, clear and age-appropriate. " +
-            "Astrology is a traditional belief system, not a scientifically " +
-            "proven way to predict the future. Never present predictions " +
-            "as guaranteed facts. Encourage thoughtful personal decisions.",
-          input: message.trim(),
-          max_output_tokens: 400
-        }),
+          messages: [
+  {
+    role: "system",
+    content:
+      "You are the Sai Nakshatra guidance assistant. " +
+      "Be respectful, supportive, clear and age-appropriate. " +
+      "Astrology is a traditional belief system, not a scientifically " +
+      "proven way to predict the future. Never present predictions " +
+      "as guaranteed facts. Encourage thoughtful personal decisions."
+  },
+  {
+    role: "user",
+    content: message.trim()
+  }
+],
+max_tokens: 400
         signal: AbortSignal.timeout(30000)
       }
     );
