@@ -311,7 +311,8 @@ function addMessage(text, type) {
   messages.scrollTop = messages.scrollHeight;
 }
 
-chatForm.addEventListener("submit", function(event) {
+
+chatForm.addEventListener("submit", async function(event) {
   event.preventDefault();
 
   const text = messageInput.value.trim();
@@ -331,17 +332,46 @@ chatForm.addEventListener("submit", function(event) {
         clearInterval(timerInterval);
         messageInput.disabled = true;
         sendBtn.disabled = true;
-        status.textContent = "Preview timer finished.";
+        status.textContent = "Your chat time has ended.";
       }
     }, 1000);
   }
 
   addMessage(text, "user");
   messageInput.value = "";
+  sendBtn.disabled = true;
+  status.textContent = "Sai Nakshatra AI is thinking...";
 
-  status.textContent =
-    "Your message is displayed in preview mode. AI replies are not connected yet.";
+  try {
+    const response = await fetch(
+      "https://sai-nakshatracomwebsite.vercel.app/api/chat",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: text
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI request failed.");
+    }
+
+    addMessage(data.reply, "assistant");
+    status.textContent = "Sai Nakshatra AI replied!";
+  } catch (error) {
+    status.textContent =
+      "AI connection error: " + error.message;
+  } finally {
+    sendBtn.disabled = remainingSeconds <= 0;
+  }
 });
+  
 </script>
 
 </body>
