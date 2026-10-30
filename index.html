@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b20">
+
+<title>Sai Nakshatra | Your Direction for Tomorrow</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background:
+    radial-gradient(ellipse at 50% 20%, #172b55 0%, transparent 55%),
+    linear-gradient(140deg, #030817, #09132c, #05091b);
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .55;
+  background-image:
+    radial-gradient(2px 2px at 15% 20%, white, transparent),
+    radial-gradient(2px 2px at 75% 30%, #e9c875, transparent),
+    radial-gradient(1px 1px at 40% 65%, white, transparent),
+    radial-gradient(2px 2px at 85% 80%, #80baff, transparent),
+    radial-gradient(1px 1px at 25% 90%, white, transparent);
+  background-size: 190px 190px;
+  z-index: 0;
+}
+
+header, main, footer {
+  position: relative;
+  z-index: 1;
+}
+
+header {
+  min-height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 7%;
+  border-bottom: 1px solid #ffffff17;
+  backdrop-filter: blur(12px);
+}
+
+.logo {
+  color: #f2d38a;
+  font-size: 23px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+nav a {
+  color: #dce6fa;
+  text-decoration: none;
+  margin-left: 24px;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+nav a:hover {
+  color: #f2d38a;
+}
+
+.hero {
+  min-height: 660px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 90px 20px;
+}
+
+.orbit {
+  width: 135px;
+  height: 135px;
+  border: 1px solid #d8b96c80;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 35px;
+  box-shadow: 0 0 45px #d8b96c25,
+              inset 0 0 35px #4278ba20;
+  animation: float 5s ease-in-out infinite;
+}
+
+.orbit span {
+  font-size: 65px;
+}
+
+.eyebrow {
+  color: #e4c57d;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 5px;
+  margin-bottom: 22px;
+}
+
+h1 {
+  font-size: clamp(40px, 8vw, 76px);
+  line-height: 1.15;
+  font-weight: normal;
+  max-width: 850px;
+  background: linear-gradient(100deg, #ffffff, #e9d59f, #a8d3ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  color: #c2cde2;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+  max-width: 570px;
+  margin: 25px auto 35px;
+}
+
+.primary-btn {
+  display: inline-block;
+  padding: 17px 34px;
+  border-radius: 40px;
+  background: linear-gradient(110deg, #d6b76d, #f2dfa8);
+  color: #111a32;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 0 30px #d8b96c35;
+  transition: .3s;
+}
+
+.primary-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 40px #e9c87575;
+}
+
+.section {
+  padding: 75px 7%;
+  text-align: center;
+}
+
+.section-title {
+  color: #f0d18a;
+  font-size: 35px;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+
+.section-description {
+  color: #aebbd2;
+  font-family: Arial, sans-serif;
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.card {
+  padding: 35px 23px;
+  border: 1px solid #ffffff20;
+  border-radius: 20px;
+  background: linear-gradient(
+    145deg,
+    #ffffff12,
+    #ffffff04
+  );
+  backdrop-filter: blur(15px);
+  transition: .3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: #d8b96c90;
+  box-shadow: 0 15px 40px #0005;
+}
+
+.card .symbol {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.card h3 {
+  color: #f0d18a;
+  font-size: 23px;
+  font-weight: normal;
+  margin-bottom: 14px;
+}
+
+.card p {
+  color: #b9c5d9;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+footer {
+  text-align: center;
+  padding: 30px 15px;
+  border-top: 1px solid #ffffff17;
+  color: #9baac5;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  line-height: 2;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@media(max-width: 700px) {
+  header {
+    flex-direction: column;
+    gap: 17px;
+  }
+
+  nav a {
+    margin: 0 9px;
+  }
+
+  .hero {
+    min-height: 570px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 60px 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✦ Sai Nakshatra</div>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#discover">Discover</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero" id="home">
+
+  <div class="orbit">
+    <span>✧</span>
+  </div>
+
+  <div class="eyebrow">ANCIENT WISDOM · NEW PERSPECTIVES</div>
+
+  <h1>Your Future.<br>Your Direction.</h1>
+
+  <p class="subtitle">
+    Explore your cosmic journey, discover meaningful
+    insights and prepare for tomorrow with Sai Nakshatra.
+  </p>
+
+  <a href="Plan.html" class="primary-btn">
+    Begin Your Journey ✨
+  </a>
+
+</section>
+
+<section class="section" id="discover">
+
+  <h2 class="section-title">Discover Your Journey</h2>
+
+  <p class="section-description">
+    Every journey begins with a question.
+    Let yours begin here.
+  </p>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="symbol">☽</div>
+      <h3>Guidance</h3>
+      <p>
+        Explore personalized astrological insights
+        and understand your cosmic profile.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="symbol">✧</div>
+      <h3>Explore</h3>
+      <p>
+        Discover your Rashi, Nakshatra and Pada
+        through your birth details.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="symbol">♧</div>
+      <h3>Prepare</h3>
+      <p>
+        Reflect on possibilities and approach
+        tomorrow with greater awareness.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="about">
+  <h2 class="section-title">A New Perspective</h2>
+
+  <p class="section-description">
+    Sai Nakshatra brings traditional astrological
+    concepts into a simple digital experience.
+    Your journey, your questions, your direction.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  ✦ Sai Nakshatra ✦<br>
+  Your Direction for Tomorrow<br>
+  © 2026 Sai Nakshatra. All rights reserved.
+</footer>
+
+</body>
+</html>
+
