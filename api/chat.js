@@ -71,7 +71,8 @@ module.exports = async function handler(req, res) {
     content: message.trim()
   }
 ],
-max_tokens: 400
+          max_tokens: 400
+        }),
         signal: AbortSignal.timeout(30000)
       }
     );
