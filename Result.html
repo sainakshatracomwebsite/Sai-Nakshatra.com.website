@@ -264,10 +264,11 @@ const birthDetails = JSON.parse(
 );
 
 const selectedPlan = JSON.parse(
-  const calculation = JSON.parse(
-  sessionStorage.getItem("saiNakshatraCalculation") || "null"
-);
   sessionStorage.getItem("saiNakshatraSelectedPlan") || "null"
+);
+
+const calculation = JSON.parse(
+  sessionStorage.getItem("saiNakshatraCalculation") || "null"
 );
 
 const validPlans = {
