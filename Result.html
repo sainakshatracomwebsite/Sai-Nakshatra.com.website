@@ -307,10 +307,22 @@ if (
   if (selectedPlan.name === "Premium") {
     document.getElementById("premiumReport")
       .classList.remove("hidden");
-  } else {
+    } else {
     document.getElementById("upgradeCard")
       .classList.remove("hidden");
   }
+
+  const chatButton = document.createElement("button");
+
+  chatButton.textContent = "Start Chat →";
+  chatButton.type = "button";
+
+  chatButton.addEventListener("click", () => {
+    window.location.href = "Chat.html";
+  });
+
+  document.getElementById("profileCard")
+    .appendChild(chatButton);
 }
 </script>
 
