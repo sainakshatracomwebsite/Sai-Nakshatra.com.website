@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b20">
+<title>AI Chat | Sai Nakshatra</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  padding: 20px 15px;
+  font-family: Arial, sans-serif;
+  color: white;
+  background:
+    radial-gradient(ellipse at top, #192d55, transparent 60%),
+    linear-gradient(145deg, #030817, #09132c, #05091b);
+}
+
+header {
+  max-width: 850px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  color: #f0d18a;
+  font: bold 21px Georgia, serif;
+}
+
+.back {
+  color: #d5dff0;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+main {
+  max-width: 700px;
+  margin: 35px auto;
+}
+
+.top {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.top span {
+  color: #e5c67d;
+  font-size: 11px;
+  letter-spacing: 4px;
+}
+
+h1 {
+  color: #f0d18a;
+  font: normal 32px Georgia, serif;
+  margin: 13px 0;
+}
+
+.top p {
+  color: #b9c6dc;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.panel {
+  border: 1px solid #ffffff25;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #ffffff14, #ffffff05);
+  box-shadow: 0 15px 45px #0005;
+}
+
+.session {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 18px;
+  border-bottom: 1px solid #ffffff20;
+}
+
+.plan {
+  color: #f0d18a;
+  font-size: 14px;
+}
+
+.timer {
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.messages {
+  min-height: 330px;
+  max-height: 450px;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.message {
+  max-width: 85%;
+  padding: 13px 15px;
+  margin-bottom: 14px;
+  border-radius: 13px;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.bot {
+  background: #ffffff12;
+  border: 1px solid #ffffff18;
+  color: #e4eaf5;
+}
+
+.user {
+  margin-left: auto;
+  background: #263b60;
+  color: white;
+}
+
+.composer {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  border-top: 1px solid #ffffff20;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #ffffff30;
+  border-radius: 25px;
+  background: #ffffff0b;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #e5c67d;
+}
+
+input::placeholder {
+  color: #8495b2;
+}
+
+button {
+  padding: 13px 20px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(100deg, #d4b36b, #f3dda1);
+  color: #09132c;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notice {
+  padding: 14px 18px;
+  color: #b9c6dc;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.error {
+  color: #ffd0d0;
+  text-align: center;
+  padding: 25px;
+  line-height: 1.7;
+}
+
+footer {
+  color: #8495b2;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 25px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✦ Sai Nakshatra</div>
+  <a href="Result.html" class="back">← Results</a>
+</header>
+
+<main>
+
+  <section class="top">
+    <span>YOUR COSMIC CONVERSATION</span>
+    <h1>AI Guidance</h1>
+    <p>Explore your questions and discover new perspectives.</p>
+  </section>
+
+  <section class="panel">
+
+    <div class="session">
+      <div class="plan" id="planName">Loading plan...</div>
+      <div class="timer" id="timer">--:--</div>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="message bot">
+        Welcome to Sai Nakshatra! Your AI chat interface is ready.
+        The AI connection will be added in a future update.
+      </div>
+    </div>
+
+    <form class="composer" id="chatForm">
+      <input
+        type="text"
+        id="messageInput"
+        placeholder="Write your message..."
+        maxlength="1000"
+        autocomplete="off"
+        required
+      >
+      <button type="submit" id="sendBtn">Send</button>
+    </form>
+
+    <p class="notice" id="status">
+      Preview mode: messages are not yet sent to an AI service.
+      The displayed timer is a demonstration only.
+    </p>
+
+  </section>
+
+  <footer>
+    Sai Nakshatra | Your Direction for Tomorrow
+  </footer>
+
+</main>
+
+<script>
+const plans = {
+  Starter: { price: 1, minutes: 3 },
+  Explorer: { price: 19, minutes: 15 },
+  Premium: { price: 49, minutes: 30 }
+};
+
+const planName = document.getElementById("planName");
+const timer = document.getElementById("timer");
+const messages = document.getElementById("messages");
+const chatForm = document.getElementById("chatForm");
+const messageInput = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+const status = document.getElementById("status");
+
+let remainingSeconds = 0;
+let timerStarted = false;
+let timerInterval = null;
+
+const selectedPlan = JSON.parse(
+  sessionStorage.getItem("saiNakshatraSelectedPlan") || "null"
+);
+
+if (
+  !selectedPlan ||
+  !plans[selectedPlan.name] ||
+  plans[selectedPlan.name].price !== selectedPlan.price
+) {
+  planName.textContent = "No valid plan selected";
+  timer.textContent = "--:--";
+  messageInput.disabled = true;
+  sendBtn.disabled = true;
+  status.textContent = "Please select a valid plan first.";
+} else {
+  const plan = plans[selectedPlan.name];
+
+  planName.textContent =
+    selectedPlan.name + " · ₹" + selectedPlan.price;
+
+  remainingSeconds = plan.minutes * 60;
+  updateTimer();
+}
+
+function updateTimer() {
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = remainingSeconds % 60;
+
+  timer.textContent =
+    String(minutes).padStart(2, "0") + ":" +
+    String(seconds).padStart(2, "0");
+}
+
+function addMessage(text, type) {
+  const bubble = document.createElement("div");
+  bubble.className = "message " + type;
+  bubble.textContent = text;
+
+  messages.appendChild(bubble);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+chatForm.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const text = messageInput.value.trim();
+
+  if (!text || !selectedPlan || remainingSeconds <= 0) {
+    return;
+  }
+
+  if (!timerStarted) {
+    timerStarted = true;
+
+    timerInterval = setInterval(function() {
+      remainingSeconds--;
+      updateTimer();
+
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        messageInput.disabled = true;
+        sendBtn.disabled = true;
+        status.textContent = "Preview timer finished.";
+      }
+    }, 1000);
+  }
+
+  addMessage(text, "user");
+  messageInput.value = "";
+
+  status.textContent =
+    "Your message is displayed in preview mode. AI replies are not connected yet.";
+});
+</script>
+
+</body>
+  </html>
+  
