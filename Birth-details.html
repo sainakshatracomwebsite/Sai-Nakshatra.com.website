@@ -284,9 +284,8 @@ window.location.href = "Result.html";
 
     window.location.href = "Result.html";
 
-  } catch (error) {
-    message.textContent =
-      "Unable to save your details. Please try again.";
+  message.textContent =
+  error.message || "Unable to calculate your birth details. Please try again.";
     continueBtn.disabled = false;
     continueBtn.textContent = "Continue ✨";
   }
