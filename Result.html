@@ -329,7 +329,10 @@ if (
 
   document.getElementById("resultPlan").textContent =
     selectedPlan.name + " - ₹" + selectedPlan.price;
-if (selectedPlan.name === "Premium" && calculation?.success) {
+if (
+  ["Premium", "Ultimate"].includes(selectedPlan.name) &&
+  calculation?.success
+) {
   document.getElementById("rashi").textContent =
     calculation.rashi || "Not available";
 
