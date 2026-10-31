@@ -346,7 +346,51 @@ const weeklyHoroscope = document.getElementById("weeklyHoroscope");
   document.getElementById("upgradeCard")
     .classList.remove("hidden");
   }
+  const generateWeeklyBtn = document.getElementById("generateWeeklyBtn");
 
+  if (generateWeeklyBtn) {
+    generateWeeklyBtn.addEventListener("click", async () => {
+      generateWeeklyBtn.disabled = true;
+      generateWeeklyBtn.textContent = "Generating...";
+
+      const weeklyHoroscope = document.getElementById("weeklyHoroscope");
+
+      try {
+        const details = JSON.parse(
+          sessionStorage.getItem("saiNakshatraBirthDetails") || "null"
+        );
+
+        const response = await fetch(
+          "https://sai-nakshatracomwebsite.vercel.app/api/chat",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              message:
+                "Write a concise traditional astrology weekly horoscope using the birth details provided. Include study or career, family and relationships, wellbeing, and a practical focus for the week. Do not claim certainty or guaranteed predictions. Clearly frame it as traditional astrology, for reflection and entertainment.",
+              birthDetails: details
+            })
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Could not generate horoscope.");
+        }
+
+        weeklyHoroscope.textContent = data.reply;
+      } catch (error) {
+        weeklyHoroscope.textContent =
+          "Sorry, the horoscope could not be generated. Please try again.";
+      } finally {
+        generateWeeklyBtn.disabled = false;
+        generateWeeklyBtn.textContent = "Generate Weekly Horoscope ✨";
+      }
+    });
+  }
   const chatButton = document.createElement("button");
 
   chatButton.textContent = "Start Chat →";
