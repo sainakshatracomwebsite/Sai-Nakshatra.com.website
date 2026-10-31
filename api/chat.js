@@ -64,7 +64,7 @@ module.exports = async function handler(req, res) {
           }))
       : [];
 const birthDetails = body.birthDetails || null;
-
+const calculation = body.calculation || null;
 const birthContext = birthDetails
   ? `
 USER BIRTH DETAILS:
