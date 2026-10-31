@@ -377,7 +377,9 @@ if (generatePersonalHoroscopeBtn) {
       const details = JSON.parse(
         sessionStorage.getItem("saiNakshatraBirthDetails") || "null"
       );
-
+const chart = JSON.parse(
+  sessionStorage.getItem("saiNakshatraCalculation") || "null"
+);
       const response = await fetch(
         "https://sai-nakshatracomwebsite.vercel.app/api/chat",
         {
