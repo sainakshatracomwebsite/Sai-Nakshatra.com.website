@@ -404,6 +404,52 @@ const weeklyHoroscope = document.getElementById("weeklyHoroscope");
       }
     });
   }
+  const generateBirthChartBtn =
+  document.getElementById("generateBirthChartBtn");
+
+if (generateBirthChartBtn) {
+  generateBirthChartBtn.addEventListener("click", async () => {
+    generateBirthChartBtn.disabled = true;
+    generateBirthChartBtn.textContent = "Generating...";
+
+    const birthChartReading =
+      document.getElementById("birthChartReading");
+
+    try {
+      const details = JSON.parse(
+        sessionStorage.getItem("saiNakshatraBirthDetails") || "null"
+      );
+
+      const response = await fetch(
+        "https://sai-nakshatracomwebsite.vercel.app/api/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message:
+              "Create a thoughtful traditional Vedic birth chart interpretation using only the verified birth chart placements provided. Explain Rashi, Nakshatra, Pada, and key themes in a warm astrologer voice. Do not invent planetary positions or claim certainty. If verified chart placements are unavailable, explain that the chart calculation is not connected yet. Treat astrology as a traditional belief system for reflection and entertainment.",
+            birthDetails: details
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Could not generate birth chart.");
+      }
+
+      birthChartReading.textContent = data.reply;
+    } catch (error) {
+      birthChartReading.textContent = "Error: " + error.message;
+    } finally {
+      generateBirthChartBtn.disabled = false;
+      generateBirthChartBtn.textContent = "Generate Birth Chart ✨";
+    }
+  });
+  }
   const chatButton = document.createElement("button");
 
   chatButton.textContent = "Start Chat →";
