@@ -286,7 +286,9 @@ footer {
 const birthDetails = JSON.parse(
   sessionStorage.getItem("saiNakshatraBirthDetails") || "null"
 );
-
+const chart = JSON.parse(
+  sessionStorage.getItem("saiNakshatraCalculation") || "null"
+);
 const selectedPlan = JSON.parse(
   sessionStorage.getItem("saiNakshatraSelectedPlan") || "null"
 );
