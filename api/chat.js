@@ -72,7 +72,14 @@ USER BIRTH DETAILS:
 - Time of birth: ${birthDetails.birthTime || "Not provided"}
 - Birthplace: ${birthDetails.birthPlace || "Not provided"}
 
-Use these details only when relevant.
+VERIFIED ASTROLOGY CALCULATION:
+${
+  calculation?.success
+    ? JSON.stringify(calculation, null, 2)
+    : "No successful chart calculation was supplied."
+}
+
+Use the supplied chart only when calculation.success is true.
 Do not invent planetary positions or unverified calculations.
 `
   : "";
