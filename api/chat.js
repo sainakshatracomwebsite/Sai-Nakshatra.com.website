@@ -63,7 +63,19 @@ module.exports = async function handler(req, res) {
             content: item.content.trim()
           }))
       : [];
+const birthDetails = body.birthDetails || null;
 
+const birthContext = birthDetails
+  ? `
+USER BIRTH DETAILS:
+- Date of birth: ${birthDetails.birthDate || "Not provided"}
+- Time of birth: ${birthDetails.birthTime || "Not provided"}
+- Birthplace: ${birthDetails.birthPlace || "Not provided"}
+
+Use these details only when relevant.
+Do not invent planetary positions or unverified calculations.
+`
+  : "";
     const systemPrompt = `
 You are Sai Nakshatra AI, a helpful general-purpose
 assistant with an additional focus on traditional astrology.
