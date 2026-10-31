@@ -349,12 +349,25 @@ chatForm.addEventListener("submit", async function(event) {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: text
-        })
-      }
-    );
+            },
+    body: JSON.stringify({
+      message: text,
+      birthDetails: (() => {
+        const details = JSON.parse(
+          sessionStorage.getItem("saiNakshatraBirthDetails") || "null"
+        );
+
+        if (!details) return null;
+
+        return {
+          birthDate: details.birthDate,
+          birthTime: details.birthTime,
+          birthPlace: details.birthPlace
+        };
+      })()
+    })
+  }
+);
 
     const data = await response.json();
 
