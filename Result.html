@@ -362,6 +362,50 @@ const weeklyHoroscope = document.getElementById("weeklyHoroscope");
   document.getElementById("upgradeCard")
     .classList.remove("hidden");
   }
+  const generatePersonalHoroscopeBtn =
+  document.getElementById("generatePersonalHoroscopeBtn");
+
+if (generatePersonalHoroscopeBtn) {
+  generatePersonalHoroscopeBtn.addEventListener("click", async () => {
+    generatePersonalHoroscopeBtn.disabled = true;
+    generatePersonalHoroscopeBtn.textContent = "Generating...";
+
+    const personalHoroscope =
+      document.getElementById("personalHoroscope");
+
+    try {
+      const details = JSON.parse(
+        sessionStorage.getItem("saiNakshatraBirthDetails") || "null"
+      );
+
+      const response = await fetch(
+        "https://sai-nakshatracomwebsite.vercel.app/api/chat",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message:
+              "Write a personalized traditional Vedic astrology horoscope for this person. Describe their personal themes in love and relationships, career, studies, family and friendships, personal growth, and wellbeing. Focus on horoscope interpretation about the person, not a list of advice. Use only verified astrological placements provided; do not invent chart details or guarantee future events. If verified placements are unavailable, clearly say the reading is general. Treat astrology as a traditional belief system for reflection and entertainment.",
+            birthDetails: details
+          })
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Could not generate personal horoscope.");
+      }
+
+      personalHoroscope.textContent = data.reply;
+    } catch (error) {
+      personalHoroscope.textContent = "Error: " + error.message;
+    } finally {
+      generatePersonalHoroscopeBtn.disabled = false;
+      generatePersonalHoroscopeBtn.textContent =
+        "Generate Personal Horoscope ✨";
+    }
+  });
+}
   const generateWeeklyBtn = document.getElementById("generateWeeklyBtn");
 
   if (generateWeeklyBtn) {
