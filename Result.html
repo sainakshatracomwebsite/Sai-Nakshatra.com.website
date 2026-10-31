@@ -329,7 +329,9 @@ if (selectedPlan.name === "Premium" && calculation?.success) {
     calculation.pada || "Not available";
   }
     if (selectedPlan.name === "Explorer") {
-    const weeklyHoroscope = document.getElementById("weeklyHoroscope");
+    document.getElementById("weeklyReport").classList.remove("hidden");
+
+const weeklyHoroscope = document.getElementById("weeklyHoroscope");
 
     if (weeklyHoroscope) {
       weeklyHoroscope.textContent =
