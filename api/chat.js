@@ -131,7 +131,7 @@ IDENTITY:
           messages: [
             {
               role: "system",
-              content: systemPrompt
+              content: systemPrompt + "\n" + birthContext
             },
             ...history,
             {
