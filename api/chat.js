@@ -158,7 +158,7 @@ IDENTITY:
         error: "The AI service is temporarily unavailable. Please try again."
       });
     }
-
+console.log("OpenRouter response:", JSON.stringify(data).slice(0, 1500));
     const reply = data.choices?.[0]?.message?.content;
 
     if (typeof reply !== "string" || !reply.trim()) {
