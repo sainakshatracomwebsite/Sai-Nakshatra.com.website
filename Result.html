@@ -387,7 +387,7 @@ const weeklyHoroscope = document.getElementById("weeklyHoroscope");
         weeklyHoroscope.textContent = data.reply;
       } catch (error) {
         weeklyHoroscope.textContent =
-          "Sorry, the horoscope could not be generated. Please try again.";
+  "Error: " + error.message;
       } finally {
         generateWeeklyBtn.disabled = false;
         generateWeeklyBtn.textContent = "Generate Weekly Horoscope ✨";
