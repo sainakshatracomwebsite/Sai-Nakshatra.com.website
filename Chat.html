@@ -340,6 +340,17 @@ function addMessage(text, type) {
 
   messages.appendChild(bubble);
   messages.scrollTop = messages.scrollHeight;
+
+  const chatHistory = JSON.parse(
+    localStorage.getItem("saiNakshatraChatHistory") || "[]"
+  );
+
+  chatHistory.push({ text, type });
+
+  localStorage.setItem(
+    "saiNakshatraChatHistory",
+    JSON.stringify(chatHistory)
+  );
 }
 
 
