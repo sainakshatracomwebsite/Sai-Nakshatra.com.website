@@ -272,7 +272,8 @@ let timerInterval = null;
 const selectedPlan = JSON.parse(
   sessionStorage.getItem("saiNakshatraSelectedPlan") || "null"
 );
-
+const timerKey = "saiNakshatraChatExpiry";
+let expiryTime = 0;
 if (
   !selectedPlan ||
   !plans[selectedPlan.name] ||
