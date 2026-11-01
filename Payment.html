@@ -239,14 +239,13 @@ button.addEventListener("click", () => {
   message.textContent =
     "Demo payment successful! No real money was charged.";
 
-  if (plan.name === "Ultimate") {
-    button.textContent = "Continue to Tarot Reading 🔮";
+  
+button.textContent = "Continue to Birth Details";
 
-    button.onclick = () => {
-      window.location.href = "Tarot.html";
-    };
-
-  } else {
+button.onclick = () => {
+  window.location.href = "Birth-details.html";
+};
+  
     button.textContent = "Continue to Birth Details";
 
     button.onclick = () => {
