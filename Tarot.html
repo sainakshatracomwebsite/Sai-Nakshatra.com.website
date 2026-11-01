@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sai Nakshatra | Tarot Reading</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #ffffff;
+      background:
+        radial-gradient(circle at top, #30205c, transparent 45%),
+        linear-gradient(135deg, #080d27, #111638, #080d27);
+      text-align: center;
+      padding: 25px 15px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #d9c4ff;
+      margin-bottom: 35px;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #f1d9ff;
+    }
+
+    .subtitle {
+      color: #c4c8e8;
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(210, 190, 255, 0.25);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #7770a9;
+      background: #111630;
+      color: white;
+      font-size: 16px;
+      resize: vertical;
+    }
+
+    textarea::placeholder {
+      color: #aaaac8;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #a78bfa, #7861dc);
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .notice {
+      color: #aaaac8;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">🌟 Sai Nakshatra</div>
+
+    <h1>🔮 Tarot Reading</h1>
+
+    <p class="subtitle">
+      Ask your question. Shuffle the cards.
+      Choose your three cards and discover
+      a new perspective.
+    </p>
+
+    <div class="card">
+
+      <h2>Your Question</h2>
+
+      <p>
+        What would you like your tarot reading
+        to explore?
+      </p>
+
+      <textarea
+        id="tarotQuestion"
+        placeholder="Enter your question here..."
+      ></textarea>
+
+      <button id="shuffleButton" onclick="startTarot()">
+        Shuffle the Cards ✨
+      </button>
+
+    </div>
+
+    <p class="notice">
+      Tarot readings are for reflection and
+      entertainment. They do not guarantee
+      future outcomes.
+    </p>
+
+  </div>
+
+  <script>
+    function startTarot() {
+      const question = document
+        .getElementById("tarotQuestion")
+        .value.trim();
+
+      if (!question) {
+        alert("Please enter your question first.");
+        return;
+      }
+
+      sessionStorage.setItem(
+        "saiNakshatraTarotQuestion",
+        question
+      );
+
+      alert("Your question is saved! The card shuffle is our next step.");
+    }
+  </script>
+
+</body>
+  </html>
+  
