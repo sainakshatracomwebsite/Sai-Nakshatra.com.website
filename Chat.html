@@ -290,10 +290,21 @@ if (
   planName.textContent =
     selectedPlan.name + " · ₹" + selectedPlan.price;
 
-  remainingSeconds = plan.minutes * 60;
+    remainingSeconds = plan.minutes * 60;
   updateTimer();
-}
 
+  const timerInterval = setInterval(() => {
+    if (remainingSeconds > 0) {
+      remainingSeconds--;
+      updateTimer();
+    } else {
+      clearInterval(timerInterval);
+      messageInput.disabled = true;
+      sendBtn.disabled = true;
+      status.textContent = "Your session has ended.";
+    }
+  }, 1000);
+}
 function updateTimer() {
   const minutes = Math.floor(remainingSeconds / 60);
   const seconds = remainingSeconds % 60;
