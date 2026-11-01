@@ -379,13 +379,23 @@ const weeklyHoroscope = document.getElementById("weeklyHoroscope");
         "Your weekly horoscope will appear here soon.";
     }
   }
-  if (selectedPlan.name === "Premium" || selectedPlan.name === "Ultimate") {
+  if (
+  selectedPlan.name === "Premium" ||
+  selectedPlan.name === "Ultimate"
+) {
   document.getElementById("premiumReport")
     .classList.remove("hidden");
-} else if (selectedPlan.name !== "Explorer") {
+}
+
+if (selectedPlan.name === "Ultimate") {
+  document.getElementById("tarotCard")
+    .classList.remove("hidden");
+}
+
+if (selectedPlan.name === "Starter") {
   document.getElementById("upgradeCard")
     .classList.remove("hidden");
-  }
+}
   if (selectedPlan.name === "Ultimate") {
   document.getElementById("tarotCard")
     .classList.remove("hidden");
