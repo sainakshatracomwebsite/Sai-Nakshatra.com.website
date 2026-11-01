@@ -478,7 +478,7 @@ if (generateBirthChartBtn) {
       const details = JSON.parse(
         sessionStorage.getItem("saiNakshatraBirthDetails") || "null"
       );
-
+console.log("Birth chart calculation:", chart);
       const response = await fetch(
         "https://sai-nakshatracomwebsite.vercel.app/api/chat",
         {
