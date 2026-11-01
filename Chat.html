@@ -352,21 +352,7 @@ chatForm.addEventListener("submit", async function(event) {
     return;
   }
 
-  if (!timerStarted) {
-    timerStarted = true;
-
-    timerInterval = setInterval(function() {
-      remainingSeconds--;
-      updateTimer();
-
-      if (remainingSeconds <= 0) {
-        clearInterval(timerInterval);
-        messageInput.disabled = true;
-        sendBtn.disabled = true;
-        status.textContent = "Your chat time has ended.";
-      }
-    }, 1000);
-  }
+  
 
   addMessage(text, "user");
   messageInput.value = "";
