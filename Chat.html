@@ -304,17 +304,25 @@ remainingSeconds = Math.max(
 
 updateTimer();
 
-  const timerInterval = setInterval(() => {
-    if (remainingSeconds > 0) {
-      remainingSeconds--;
-      updateTimer();
-    } else {
-      clearInterval(timerInterval);
-      messageInput.disabled = true;
-      sendBtn.disabled = true;
-      status.textContent = "Your session has ended.";
-    }
-  }, 1000);
+  const tickTimer = () => {
+  remainingSeconds = Math.max(
+    0,
+    Math.ceil((expiryTime - Date.now()) / 1000)
+  );
+
+  updateTimer();
+
+  if (remainingSeconds <= 0) {
+    clearInterval(timerInterval);
+    messageInput.disabled = true;
+    sendBtn.disabled = true;
+    status.textContent = "Your session has ended.";
+    sessionStorage.removeItem(timerKey);
+  }
+};
+
+tickTimer();
+timerInterval = setInterval(tickTimer, 1000);
 }
 function updateTimer() {
   const minutes = Math.floor(remainingSeconds / 60);
