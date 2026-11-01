@@ -195,7 +195,7 @@ IDENTITY:
               content: message.trim()
             }
           ],
-          max_tokens: 1400,
+          max_tokens: 2200,
           temperature: 0.6
         }),
         signal: AbortSignal.timeout(30000)
