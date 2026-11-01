@@ -162,23 +162,134 @@
   </div>
 
   <script>
-    function startTarot() {
-      const question = document
-        .getElementById("tarotQuestion")
-        .value.trim();
+    
+<script>
+const tarotCards = [
+  "The Fool", "The Magician", "The High Priestess",
+  "The Empress", "The Emperor", "The Hierophant",
+  "The Lovers", "The Chariot", "Strength",
+  "The Hermit", "Wheel of Fortune", "Justice",
+  "The Hanged Man", "Death", "Temperance",
+  "The Devil", "The Tower", "The Star",
+  "The Moon", "The Sun", "Judgement",
+  "The World"
+];
 
-      if (!question) {
-        alert("Please enter your question first.");
-        return;
+let selectedCards = [];
+
+function startTarot() {
+  const question = document
+    .getElementById("tarotQuestion")
+    .value.trim();
+
+  if (!question) {
+    alert("Please enter your question first.");
+    return;
+  }
+
+  sessionStorage.setItem(
+    "saiNakshatraTarotQuestion",
+    question
+  );
+
+  selectedCards = [];
+
+  const shuffled = [...tarotCards]
+    .sort(() => Math.random() - 0.5);
+
+  const deck = document.getElementById("tarotDeck");
+  const cards = document.getElementById("cards");
+  const revealButton = document.getElementById("revealButton");
+
+  cards.replaceChildren();
+  revealButton.disabled = true;
+
+  document.getElementById("readingResult").textContent = "";
+  document.getElementById("cardMessage").textContent =
+    "Choose 3 cards from the shuffled deck.";
+
+  deck.style.display = "block";
+
+  shuffled.forEach((card, index) => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.textContent = "✦";
+    button.style.width = "75px";
+    button.style.height = "115px";
+    button.style.margin = "0";
+    button.style.padding = "0";
+    button.style.border = "2px solid #c4a7ff";
+    button.style.borderRadius = "12px";
+    button.style.background =
+      "linear-gradient(135deg, #30205c, #111638)";
+    button.style.fontSize = "28px";
+
+    button.onclick = function () {
+      if (selectedCards.length >= 3) return;
+
+      if (selectedCards.includes(card)) return;
+
+      selectedCards.push(card);
+
+      button.textContent = "✓";
+      button.style.background = "#59458c";
+      button.disabled = true;
+
+      document.getElementById("cardMessage").textContent =
+        "You selected " + selectedCards.length + " of 3 cards.";
+
+      if (selectedCards.length === 3) {
+        revealButton.disabled = false;
+        document.getElementById("cardMessage").textContent =
+          "Your three cards are ready!";
       }
+    };
 
-      sessionStorage.setItem(
-        "saiNakshatraTarotQuestion",
-        question
-      );
+    cards.appendChild(button);
+  });
 
-      alert("Your question is saved! The card shuffle is our next step.");
-    }
+  deck.scrollIntoView({ behavior: "smooth" });
+}
+
+function revealCards() {
+  if (selectedCards.length !== 3) return;
+
+  const result = document.getElementById("readingResult");
+
+  result.replaceChildren();
+
+  selectedCards.forEach((card, index) => {
+    const item = document.createElement("div");
+
+    item.style.margin = "20px 0";
+    item.style.padding = "15px";
+    item.style.border = "1px solid #c4a7ff";
+    item.style.borderRadius = "12px";
+    item.style.background = "rgba(255,255,255,0.07)";
+
+    const title = document.createElement("h3");
+
+    title.textContent =
+      ["Past", "Present", "Future"][index];
+
+    const name = document.createElement("p");
+
+    name.textContent = "🔮 " + card;
+
+    item.appendChild(title);
+    item.appendChild(name);
+
+    result.appendChild(item);
+  });
+
+  document.getElementById("cardMessage").textContent =
+    "Your cards have been revealed!";
+
+  document.getElementById("revealButton").disabled = true;
+}
+</script>
+  
   </script>
 
 </body>
