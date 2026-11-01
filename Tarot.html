@@ -311,11 +311,16 @@ async function revealCards() {
         },
         body: JSON.stringify({
           message:
-            "Interpret these three tarot cards in relation to the user's question. Explain Past, Present, and Future, then end with practical, thoughtful guidance. Treat tarot as reflection, not a guaranteed prediction.",
-          tarotQuestion: question,
-          tarotCards: selectedCards.map((card, index) => ({
-            position: positions[index],
-            name: card
+  "You are Sai Nakshatra AI giving a thoughtful tarot reflection. " +
+  "Treat tarot as reflection, not a guaranteed prediction. " +
+  "The user's question is: " + question + "\n\n" +
+  "Their selected cards are:\n" +
+  positions.map((position, index) =>
+    position + ": " + selectedCards[index]
+  ).join("\n") +
+  "\n\nExplain each card in relation to the question, " +
+  "then end with a practical section titled Your Guidance. " +
+  "Be kind, specific, age-appropriate, and do not make frightening claims."
           }))
         })
       }
