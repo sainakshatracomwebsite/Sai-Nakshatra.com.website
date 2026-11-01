@@ -290,8 +290,19 @@ if (
   planName.textContent =
     selectedPlan.name + " · ₹" + selectedPlan.price;
 
-    remainingSeconds = plan.minutes * 60;
-  updateTimer();
+    expiryTime = Number(sessionStorage.getItem(timerKey));
+
+if (!expiryTime || !Number.isFinite(expiryTime)) {
+  expiryTime = Date.now() + plan.minutes * 60 * 1000;
+  sessionStorage.setItem(timerKey, String(expiryTime));
+}
+
+remainingSeconds = Math.max(
+  0,
+  Math.ceil((expiryTime - Date.now()) / 1000)
+);
+
+updateTimer();
 
   const timerInterval = setInterval(() => {
     if (remainingSeconds > 0) {
