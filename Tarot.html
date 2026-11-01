@@ -348,8 +348,65 @@ async function revealCards() {
   button.textContent = "Cards Revealed 🔮";
 }
   
+    </script>
+
+  <!-- Tarot Reading 1-Hour Timer -->
+  <div id="tarotTimer" style="
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    background: #101b3d;
+    color: #ffffff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 1px solid #6c63ff;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 9999;
+  ">
+    Tarot Time: 60:00
+  </div>
+
+  <script>
+    const tarotTimerElement = document.getElementById("tarotTimer");
+
+    const tarotDuration = 60 * 60;
+    const tarotStartKey = "saiNakshatraTarotStart";
+
+    let tarotStartTime = sessionStorage.getItem(tarotStartKey);
+
+    if (!tarotStartTime) {
+      tarotStartTime = Date.now();
+      sessionStorage.setItem(tarotStartKey, tarotStartTime);
+    }
+
+    function updateTarotTimer() {
+      const elapsed = Math.floor(
+        (Date.now() - Number(tarotStartTime)) / 1000
+      );
+
+      const remaining = Math.max(0, tarotDuration - elapsed);
+
+      const minutes = Math.floor(remaining / 60);
+      const seconds = remaining % 60;
+
+      tarotTimerElement.textContent =
+        "Tarot Time: " +
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+
+      if (remaining <= 0) {
+        clearInterval(tarotInterval);
+        tarotTimerElement.textContent = "Tarot Session Ended";
+      }
+    }
+
+    updateTarotTimer();
+
+    const tarotInterval = setInterval(updateTarotTimer, 1000);
   </script>
 
 </body>
-  </html>
+</html>
   
