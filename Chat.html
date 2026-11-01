@@ -353,7 +353,16 @@ function addMessage(text, type) {
   );
 }
 
+const savedChatHistory = JSON.parse(
+  localStorage.getItem("saiNakshatraChatHistory") || "[]"
+);
 
+savedChatHistory.forEach(function(item) {
+  const bubble = document.createElement("div");
+  bubble.className = "message " + item.type;
+  bubble.textContent = item.text;
+  messages.appendChild(bubble);
+});
 chatForm.addEventListener("submit", async function(event) {
   event.preventDefault();
 
