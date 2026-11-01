@@ -137,7 +137,28 @@
       entertainment. They do not guarantee
       future outcomes.
     </p>
+<div id="tarotDeck" style="display:none; margin-top:30px;">
 
+  <h2>Choose Your 3 Cards ✨</h2>
+
+  <p id="cardMessage">
+    Select three cards from the shuffled deck.
+  </p>
+
+  <div id="cards"
+       style="display:flex; flex-wrap:wrap;
+       justify-content:center; gap:12px;">
+  </div>
+
+  <button id="revealButton"
+          onclick="revealCards()"
+          disabled>
+    Reveal My Cards 🔮
+  </button>
+
+  <div id="readingResult"></div>
+
+</div>
   </div>
 
   <script>
