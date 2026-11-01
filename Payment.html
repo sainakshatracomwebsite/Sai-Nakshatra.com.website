@@ -225,6 +225,7 @@ try {
     button.disabled = false;
 button.textContent = "Pay ₹" + plan.price + " (Demo)";
 
+
 button.addEventListener("click", () => {
   sessionStorage.setItem(
     "saiNakshatraDemoPayment",
@@ -238,12 +239,22 @@ button.addEventListener("click", () => {
   message.textContent =
     "Demo payment successful! No real money was charged.";
 
-  button.textContent = "Continue to Birth Details";
+  if (plan.name === "Ultimate") {
+    button.textContent = "Continue to Tarot Reading 🔮";
 
-  button.onclick = () => {
-    window.location.href = "Birth-details.html";
-  };
+    button.onclick = () => {
+      window.location.href = "Tarot.html";
+    };
+
+  } else {
+    button.textContent = "Continue to Birth Details";
+
+    button.onclick = () => {
+      window.location.href = "Birth-details.html";
+    };
+  }
 });
+    
   }
 
 } catch (error) {
