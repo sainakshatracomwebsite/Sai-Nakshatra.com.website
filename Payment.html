@@ -195,6 +195,7 @@ try {
     planName.textContent = "No plan selected";
     planPrice.textContent = "₹--";
     notice.textContent = "Please select a plan first.";
+
     button.disabled = false;
     button.textContent = "Choose a Plan";
 
@@ -206,16 +207,13 @@ try {
     const plan = JSON.parse(savedPlan);
 
     const validPlans = {
-  Starter: 1,
-  Explorer: 19,
-  Premium: 49,
-  Ultimate: 99
-};
+      Starter: 1,
+      Explorer: 19,
+      Premium: 49,
+      Ultimate: 99
+    };
 
-    if (
-      !plan ||
-      validPlans[plan.name] !== plan.price
-    ) {
+    if (!plan || validPlans[plan.name] !== plan.price) {
       throw new Error("Invalid plan information");
     }
 
@@ -223,49 +221,42 @@ try {
     planPrice.textContent = "₹" + plan.price;
 
     button.disabled = false;
-button.textContent = "Pay ₹" + plan.price + " (Demo)";
+    button.textContent = "Pay ₹" + plan.price + " (Demo)";
 
+    button.addEventListener("click", () => {
+      sessionStorage.setItem(
+        "saiNakshatraDemoPayment",
+        JSON.stringify({
+          plan: plan.name,
+          amount: plan.price,
+          status: "demo-success"
+        })
+      );
 
-button.addEventListener("click", () => {
-  sessionStorage.setItem(
-    "saiNakshatraDemoPayment",
-    JSON.stringify({
-      plan: plan.name,
-      amount: plan.price,
-      status: "demo-success"
-    })
-  );
+      message.textContent =
+        "Demo payment successful! No real money was charged.";
 
-  message.textContent =
-    "Demo payment successful! No real money was charged.";
+      button.textContent = "Continue to Birth Details";
 
-  
-button.textContent = "Continue to Birth Details";
-
-button.onclick = () => {
-  window.location.href = "Birth-details.html";
-};
-  
-    button.textContent = "Continue to Birth Details";
-
-    button.onclick = () => {
-      window.location.href = "Birth-details.html";
-    };
-  }
-});
-    
+      button.onclick = () => {
+        window.location.href = "Birth-details.html";
+      };
+    });
   }
 
 } catch (error) {
+  console.error("Payment page error:", error);
+
   planName.textContent = "Unable to load plan";
   planPrice.textContent = "₹--";
   notice.textContent = "Please return and select your plan again.";
+
   button.textContent = "Back to Plans";
   button.disabled = false;
 
-  button.addEventListener("click", () => {
+  button.onclick = () => {
     window.location.href = "Plan.html";
-  });
+  };
 }
 </script>
 
