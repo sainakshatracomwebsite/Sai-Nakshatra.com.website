@@ -388,6 +388,7 @@ if (generatePersonalHoroscopeBtn) {
 const chart = JSON.parse(
   sessionStorage.getItem("saiNakshatraCalculation") || "null"
 );
+      console.log("Birth chart calculation:", chart);
       const response = await fetch(
         "https://sai-nakshatracomwebsite.vercel.app/api/chat",
         {
