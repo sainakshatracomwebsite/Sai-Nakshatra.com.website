@@ -386,6 +386,10 @@ const weeklyHoroscope = document.getElementById("weeklyHoroscope");
   document.getElementById("upgradeCard")
     .classList.remove("hidden");
   }
+  if (selectedPlan.name === "Ultimate") {
+  document.getElementById("tarotCard")
+    .classList.remove("hidden");
+        }
   const generatePersonalHoroscopeBtn =
   document.getElementById("generatePersonalHoroscopeBtn");
 
