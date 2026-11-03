@@ -456,6 +456,60 @@ calculation: chart
     }
   });
 }
+  const generateLoveHoroscopeBtn =
+  document.getElementById("generateLoveHoroscopeBtn");
+
+if (generateLoveHoroscopeBtn) {
+  generateLoveHoroscopeBtn.addEventListener("click", async () => {
+    generateLoveHoroscopeBtn.disabled = true;
+    generateLoveHoroscopeBtn.textContent = "Generating...";
+
+    const loveHoroscope =
+      document.getElementById("loveHoroscope");
+
+    try {
+      const details = JSON.parse(
+        sessionStorage.getItem("saiNakshatraBirthDetails") || "null"
+      );
+
+      const chart = JSON.parse(
+        sessionStorage.getItem("saiNakshatraCalculation") || "null"
+      );
+
+      const response = await fetch(
+        "https://sai-nakshatracomwebsite.vercel.app/api/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message:
+              "Write a gentle, age-appropriate traditional Vedic love horoscope. Discuss relationship themes, communication, kindness, trust, and healthy boundaries. Do not make guaranteed predictions, claim someone is destined to be a partner, or include sexual content. Use only verified astrology placements provided; if they are unavailable, clearly say the reading is general. Treat astrology as a traditional belief system for reflection and entertainment.",
+            birthDetails: details,
+            calculation: chart
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error || "Could not generate Love Horoscope."
+        );
+      }
+
+      loveHoroscope.textContent = data.reply;
+    } catch (error) {
+      loveHoroscope.textContent = "Error: " + error.message;
+    } finally {
+      generateLoveHoroscopeBtn.disabled = false;
+      generateLoveHoroscopeBtn.textContent =
+        "Generate Love Horoscope 💖";
+    }
+  });
+}
   const generateWeeklyBtn = document.getElementById("generateWeeklyBtn");
 
   if (generateWeeklyBtn) {
