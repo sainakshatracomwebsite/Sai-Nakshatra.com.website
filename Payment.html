@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,8 +45,8 @@ header {
 
 main {
   max-width: 480px;
-  margin: 75px auto;
-  padding: 35px 25px;
+  margin: 45px auto;
+  padding: 30px 22px;
   border: 1px solid #ffffff25;
   border-radius: 22px;
   background: linear-gradient(145deg, #ffffff14, #ffffff05);
@@ -57,7 +56,7 @@ main {
 
 .heading {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .heading span {
@@ -68,7 +67,7 @@ main {
 
 h1 {
   color: #f0d18a;
-  font-size: 34px;
+  font-size: 32px;
   font-weight: normal;
   margin: 15px 0;
 }
@@ -79,10 +78,10 @@ h1 {
 }
 
 .summary {
-  padding: 22px;
+  padding: 20px;
   border: 1px solid #ffffff20;
   border-radius: 15px;
-  margin-bottom: 25px;
+  margin-bottom: 22px;
 }
 
 .summary p {
@@ -105,7 +104,28 @@ h1 {
   color: #c3cee0;
   font: 13px/1.7 Arial, sans-serif;
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+}
+
+.qr-box {
+  background: white;
+  padding: 12px;
+  border-radius: 16px;
+  max-width: 280px;
+  margin: 0 auto 20px;
+}
+
+.qr-box img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.qr-caption {
+  color: #b9c6dc;
+  text-align: center;
+  font: 13px/1.7 Arial, sans-serif;
+  margin-bottom: 20px;
 }
 
 button {
@@ -135,8 +155,8 @@ button:disabled {
 footer {
   text-align: center;
   color: #8495b2;
-  font: 12px Arial, sans-serif;
-  margin-top: 35px;
+  font: 12px/1.7 Arial, sans-serif;
+  margin-top: 30px;
 }
 </style>
 </head>
@@ -152,8 +172,8 @@ footer {
 
   <section class="heading">
     <span>YOUR JOURNEY CONTINUES</span>
-    <h1>Order Summary</h1>
-    <p>Review your selected experience.</p>
+    <h1>UPI Payment</h1>
+    <p>Scan the BharatPe QR code to pay for your selected plan.</p>
   </section>
 
   <section class="summary">
@@ -163,18 +183,29 @@ footer {
   </section>
 
   <p class="notice" id="notice">
-    Your plan selection is ready.
-    Payment is not yet enabled.
+    Please pay the exact amount shown above.
   </p>
 
-  <button id="continueBtn" disabled>
-    Payment Coming Soon
+  <div class="qr-box">
+    <img
+      src="Screenshot_20261103-235122.png"
+      alt="BharatPe UPI payment QR code">
+  </div>
+
+  <p class="qr-caption">
+    Open any UPI app, scan the QR code, and pay the exact plan amount.
+    Check the recipient name before confirming your payment.
+  </p>
+
+  <button id="paidBtn" disabled>
+    I've Paid
   </button>
 
   <p class="message" id="message"></p>
 
   <footer>
-    Secure payment integration will be added before launch.
+    Payment is manually checked by the merchant.
+    Your plan is not activated until payment is confirmed.
   </footer>
 
 </main>
@@ -184,7 +215,14 @@ const planName = document.getElementById("planName");
 const planPrice = document.getElementById("planPrice");
 const notice = document.getElementById("notice");
 const message = document.getElementById("message");
-const button = document.getElementById("continueBtn");
+const paidBtn = document.getElementById("paidBtn");
+
+const validPlans = {
+  Starter: 1,
+  Explorer: 19,
+  Premium: 49,
+  Ultimate: 99
+};
 
 try {
   const savedPlan = sessionStorage.getItem(
@@ -196,22 +234,15 @@ try {
     planPrice.textContent = "₹--";
     notice.textContent = "Please select a plan first.";
 
-    button.disabled = false;
-    button.textContent = "Choose a Plan";
+    paidBtn.disabled = false;
+    paidBtn.textContent = "Choose a Plan";
 
-    button.addEventListener("click", () => {
+    paidBtn.addEventListener("click", () => {
       window.location.href = "Plan.html";
     });
 
   } else {
     const plan = JSON.parse(savedPlan);
-
-    const validPlans = {
-      Starter: 1,
-      Explorer: 19,
-      Premium: 49,
-      Ultimate: 99
-    };
 
     if (!plan || validPlans[plan.name] !== plan.price) {
       throw new Error("Invalid plan information");
@@ -220,27 +251,14 @@ try {
     planName.textContent = plan.name;
     planPrice.textContent = "₹" + plan.price;
 
-    button.disabled = false;
-    button.textContent = "Pay ₹" + plan.price + " (Demo)";
+    paidBtn.disabled = false;
 
-    button.addEventListener("click", () => {
-      sessionStorage.setItem(
-        "saiNakshatraDemoPayment",
-        JSON.stringify({
-          plan: plan.name,
-          amount: plan.price,
-          status: "demo-success"
-        })
-      );
-
+    paidBtn.addEventListener("click", () => {
       message.textContent =
-        "Demo payment successful! No real money was charged.";
+        "Payment confirmation is pending. Please contact the merchant with your UPI transaction reference. Your plan will be activated only after the payment is verified.";
 
-      button.textContent = "Continue to Birth Details";
-
-      button.onclick = () => {
-        window.location.href = "Birth-details.html";
-      };
+      paidBtn.disabled = true;
+      paidBtn.textContent = "Confirmation Pending";
     });
   }
 
@@ -251,15 +269,14 @@ try {
   planPrice.textContent = "₹--";
   notice.textContent = "Please return and select your plan again.";
 
-  button.textContent = "Back to Plans";
-  button.disabled = false;
+  paidBtn.textContent = "Back to Plans";
+  paidBtn.disabled = false;
 
-  button.onclick = () => {
+  paidBtn.onclick = () => {
     window.location.href = "Plan.html";
   };
 }
 </script>
 
 </body>
-  </html>
-  
+</html>
