@@ -237,12 +237,10 @@ try {
 
       const upiUrl = "upi://pay?" + params.toString();
 
+message.textContent =
+  "Opening your UPI app. Please check the recipient and amount before paying.";
+
 window.location.href = upiUrl;
-
-      message.textContent =
-        "Opening your UPI app. Please check the recipient and amount before paying.";
-
-      window.location.href = upiUrl;
     });
   }
 
