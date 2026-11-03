@@ -125,40 +125,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.qr-button {
-  margin-top: 12px;
-  background: transparent;
-  border: 1px solid #e5c67d;
-  color: #f0d18a;
-}
-
-.qr-section {
-  display: none;
-  text-align: center;
-  margin-top: 22px;
-  padding: 16px;
-  border: 1px solid #ffffff25;
-  border-radius: 15px;
-  background: #ffffff08;
-}
-
-.qr-section p {
-  color: #c3cee0;
-  font: 13px/1.7 Arial, sans-serif;
-  margin-bottom: 12px;
-}
-
-.qr-section img {
-  display: block;
-  width: 100%;
-  max-width: 280px;
-  height: auto;
-  margin: auto;
-  padding: 10px;
-  background: white;
-  border-radius: 12px;
-}
-
 .message {
   color: #f0d18a;
   text-align: center;
@@ -197,32 +163,12 @@ footer {
   </section>
 
   <p class="notice" id="notice">
-    Choose UPI payment or scan the merchant QR code.
+    Pay securely using your preferred UPI app.
   </p>
 
   <button id="payBtn" disabled>
     Loading Payment...
   </button>
-
-  <button id="showQrBtn" type="button" class="qr-button">
-    Show QR Code
-  </button>
-
-  <section id="qrSection" class="qr-section">
-    <p>
-      Scan this QR using your UPI app.
-      Check the recipient and amount before paying.
-    </p>
-
-    <img
-      src="Screenshot_20261103-235122.png"
-      alt="Sai Nakshatra BharatPe merchant QR code"
-    >
-
-    <p style="margin-top:12px;">
-      If the QR does not load, check that the image is in the repository root.
-    </p>
-  </section>
 
   <p class="message" id="message"></p>
 
@@ -239,8 +185,6 @@ const planPrice = document.getElementById("planPrice");
 const notice = document.getElementById("notice");
 const message = document.getElementById("message");
 const payBtn = document.getElementById("payBtn");
-const showQrBtn = document.getElementById("showQrBtn");
-const qrSection = document.getElementById("qrSection");
 
 const validPlans = {
   Starter: 1,
@@ -251,14 +195,6 @@ const validPlans = {
 
 const merchantUpiId = "BHARATPE2B0X0S8N9U72571@unitype";
 const merchantName = "Sai Nakshatra";
-
-// Show or hide the merchant QR.
-showQrBtn.addEventListener("click", () => {
-  const isHidden = qrSection.style.display === "none";
-
-  qrSection.style.display = isHidden ? "block" : "none";
-  showQrBtn.textContent = isHidden ? "Hide QR Code" : "Show QR Code";
-});
 
 try {
   const savedPlan = sessionStorage.getItem(
