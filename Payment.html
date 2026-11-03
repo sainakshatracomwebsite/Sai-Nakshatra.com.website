@@ -1,4 +1,5 @@
-  <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -124,6 +125,40 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.qr-button {
+  margin-top: 12px;
+  background: transparent;
+  border: 1px solid #e5c67d;
+  color: #f0d18a;
+}
+
+.qr-section {
+  display: none;
+  text-align: center;
+  margin-top: 22px;
+  padding: 16px;
+  border: 1px solid #ffffff25;
+  border-radius: 15px;
+  background: #ffffff08;
+}
+
+.qr-section p {
+  color: #c3cee0;
+  font: 13px/1.7 Arial, sans-serif;
+  margin-bottom: 12px;
+}
+
+.qr-section img {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin: auto;
+  padding: 10px;
+  background: white;
+  border-radius: 12px;
+}
+
 .message {
   color: #f0d18a;
   text-align: center;
@@ -162,18 +197,38 @@ footer {
   </section>
 
   <p class="notice" id="notice">
-    Tap below to open a supported UPI app with your amount filled in.
+    Choose UPI payment or scan the merchant QR code.
   </p>
 
   <button id="payBtn" disabled>
     Loading Payment...
   </button>
 
+  <button id="showQrBtn" type="button" class="qr-button">
+    Show QR Code
+  </button>
+
+  <section id="qrSection" class="qr-section">
+    <p>
+      Scan this QR using your UPI app.
+      Check the recipient and amount before paying.
+    </p>
+
+    <img
+      src="Screenshot_20261103-235122.png"
+      alt="Sai Nakshatra BharatPe merchant QR code"
+    >
+
+    <p style="margin-top:12px;">
+      If the QR does not load, check that the image is in the repository root.
+    </p>
+  </section>
+
   <p class="message" id="message"></p>
 
   <footer>
-    After paying, the merchant must confirm the transaction.
-    Returning from a UPI app does not automatically verify payment.
+    Payment is not automatically verified by this page.
+    The merchant must confirm the transaction before a plan is unlocked.
   </footer>
 
 </main>
@@ -184,6 +239,8 @@ const planPrice = document.getElementById("planPrice");
 const notice = document.getElementById("notice");
 const message = document.getElementById("message");
 const payBtn = document.getElementById("payBtn");
+const showQrBtn = document.getElementById("showQrBtn");
+const qrSection = document.getElementById("qrSection");
 
 const validPlans = {
   Starter: 1,
@@ -192,9 +249,16 @@ const validPlans = {
   Ultimate: 99
 };
 
-// Confirm this exact UPI ID in BharatPe before using it.
 const merchantUpiId = "BHARATPE2B0X0S8N9U72571@unitype";
 const merchantName = "Sai Nakshatra";
+
+// Show or hide the merchant QR.
+showQrBtn.addEventListener("click", () => {
+  const isHidden = qrSection.style.display === "none";
+
+  qrSection.style.display = isHidden ? "block" : "none";
+  showQrBtn.textContent = isHidden ? "Hide QR Code" : "Show QR Code";
+});
 
 try {
   const savedPlan = sessionStorage.getItem(
@@ -237,10 +301,10 @@ try {
 
       const upiUrl = "upi://pay?" + params.toString();
 
-message.textContent =
-  "Opening your UPI app. Please check the recipient and amount before paying.";
+      message.textContent =
+        "Opening your UPI app. Check the recipient and amount before paying.";
 
-window.location.href = upiUrl;
+      window.location.href = upiUrl;
     });
   }
 
@@ -261,4 +325,4 @@ window.location.href = upiUrl;
 </script>
 
 </body>
-    </html>
+</html>
