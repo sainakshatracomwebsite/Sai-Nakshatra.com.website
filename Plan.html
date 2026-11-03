@@ -25,7 +25,7 @@ body {
 }
 
 header {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -73,17 +73,17 @@ h1 {
 }
 
 .plans {
-  max-width: 1050px;
+  max-width: 1200px;
   margin: auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
   align-items: stretch;
 }
 
 .plan {
   position: relative;
-  padding: 35px 23px;
+  padding: 30px 18px;
   border: 1px solid #ffffff25;
   border-radius: 20px;
   background: linear-gradient(145deg, #ffffff14, #ffffff05);
@@ -181,7 +181,14 @@ button:hover {
   font: 12px/1.8 Arial, sans-serif;
 }
 
-@media(max-width: 750px) {
+@media(max-width: 1000px) {
+  .plans {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 750px;
+  }
+}
+
+@media(max-width: 600px) {
   .plans {
     grid-template-columns: 1fr;
     max-width: 420px;
@@ -216,33 +223,39 @@ button:hover {
 
 <main class="plans">
 
+  <!-- STARTER PLAN -->
   <article class="plan">
     <div class="tag">THE BEGINNING</div>
     <h2>Starter</h2>
     <div class="price">₹1</div>
+
     <p class="description">
       A simple introduction to your
       astrological journey.
     </p>
+
     <ul>
-  <li>Basic birth profile</li>
-  <li>3-minute AI chat session</li>
-  <li>Introductory astrological guidance</li>
+      <li>Basic birth profile</li>
+      <li>3-minute AI chat session</li>
+      <li>Introductory astrological guidance</li>
     </ul>
+
     <button onclick="selectPlan('Starter', 1)">
       Choose Starter
     </button>
   </article>
 
-  
+  <!-- EXPLORER PLAN -->
   <article class="plan featured">
     <div class="tag">POPULAR EXPERIENCE</div>
     <h2>Explorer</h2>
     <div class="price">₹19</div>
+
     <p class="description">
       Explore your cosmic profile
       with a deeper experience.
     </p>
+
     <ul>
       <li>Detailed birth profile</li>
       <li>15-minute AI chat session</li>
@@ -251,55 +264,66 @@ button:hover {
       <li>Monthly horoscope</li>
       <li>Deeper astrological exploration</li>
     </ul>
+
     <button onclick="selectPlan('Explorer', 19)">
       Choose Explorer
     </button>
   </article>
-  
 
+  <!-- PREMIUM PLAN -->
   <article class="plan">
     <div class="tag">EXTENDED EXPERIENCE</div>
     <h2>Premium</h2>
     <div class="price">₹49</div>
+
     <p class="description">
       An extended journey into
       your astrological profile.
     </p>
+
     <ul>
-  <li>Detailed birth profile</li>
-  <li>30-minute AI chat session</li>
-  <li>Personal horoscope</li>
-  <li>Birth chart</li>
-  <li>Rashi, Nakshatra and Pada details</li>
+      <li>Detailed birth profile</li>
+      <li>30-minute AI chat session</li>
+      <li>Personal horoscope</li>
+      <li>Birth chart</li>
+      <li>Rashi, Nakshatra and Pada details</li>
     </ul>
+
     <button onclick="selectPlan('Premium', 49)">
       Choose Premium
     </button>
   </article>
 
+  <!-- ULTIMATE PLAN -->
   <article class="plan">
     <div class="tag">ULTIMATE EXPERIENCE</div>
     <h2>Ultimate</h2>
     <div class="price">₹99</div>
+
     <p class="description">
-      Explore astrology and tarot
-      in one complete experience.
+      Explore astrology, relationships
+      and tarot in one complete experience.
     </p>
+
     <ul>
       <li>Everything in the ₹19 Explorer plan</li>
       <li>Everything in the ₹49 Premium plan</li>
       <li>Extended AI chat session</li>
       <li>Personal horoscope</li>
       <li>Birth chart and birth details</li>
+      <li>Love horoscope</li>
+      <li>Traditional Kundali matching</li>
+      <li>Ashtakoota / Guna Milan compatibility</li>
+      <li>Relationship compatibility interpretation</li>
       <li>Traditional tarot card reading</li>
       <li>One-card or three-card tarot spread</li>
     </ul>
-   <button onclick="selectPlan('Ultimate', 99)">
-  Choose Ultimate 🔮
-   </button>
+
+    <button onclick="selectPlan('Ultimate', 99)">
+      Choose Ultimate 🔮
     </button>
   </article>
-  
+
 </main>
 
 <div class="note">
@@ -319,4 +343,5 @@ function selectPlan(name, price) {
 </script>
 
 </body>
-</html>
+  </html>
+  
