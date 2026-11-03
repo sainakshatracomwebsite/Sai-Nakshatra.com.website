@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -45,7 +45,7 @@ header {
 
 main {
   max-width: 480px;
-  margin: 45px auto;
+  margin: 60px auto;
   padding: 30px 22px;
   border: 1px solid #ffffff25;
   border-radius: 22px;
@@ -107,27 +107,6 @@ h1 {
   margin-bottom: 20px;
 }
 
-.qr-box {
-  background: white;
-  padding: 12px;
-  border-radius: 16px;
-  max-width: 280px;
-  margin: 0 auto 20px;
-}
-
-.qr-box img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.qr-caption {
-  color: #b9c6dc;
-  text-align: center;
-  font: 13px/1.7 Arial, sans-serif;
-  margin-bottom: 20px;
-}
-
 button {
   width: 100%;
   padding: 16px;
@@ -173,7 +152,7 @@ footer {
   <section class="heading">
     <span>YOUR JOURNEY CONTINUES</span>
     <h1>UPI Payment</h1>
-    <p>Scan the BharatPe QR code to pay for your selected plan.</p>
+    <p>Pay securely using your preferred UPI app.</p>
   </section>
 
   <section class="summary">
@@ -183,29 +162,18 @@ footer {
   </section>
 
   <p class="notice" id="notice">
-    Please pay the exact amount shown above.
+    Tap below to open a supported UPI app with your amount filled in.
   </p>
 
-  <div class="qr-box">
-    <img
-      src="Screenshot_20261103-235122.png"
-      alt="BharatPe UPI payment QR code">
-  </div>
-
-  <p class="qr-caption">
-    Open any UPI app, scan the QR code, and pay the exact plan amount.
-    Check the recipient name before confirming your payment.
-  </p>
-
-  <button id="paidBtn" disabled>
-    I've Paid
+  <button id="payBtn" disabled>
+    Loading Payment...
   </button>
 
   <p class="message" id="message"></p>
 
   <footer>
-    Payment is manually checked by the merchant.
-    Your plan is not activated until payment is confirmed.
+    After paying, the merchant must confirm the transaction.
+    Returning from a UPI app does not automatically verify payment.
   </footer>
 
 </main>
@@ -215,7 +183,7 @@ const planName = document.getElementById("planName");
 const planPrice = document.getElementById("planPrice");
 const notice = document.getElementById("notice");
 const message = document.getElementById("message");
-const paidBtn = document.getElementById("paidBtn");
+const payBtn = document.getElementById("payBtn");
 
 const validPlans = {
   Starter: 1,
@@ -223,6 +191,10 @@ const validPlans = {
   Premium: 49,
   Ultimate: 99
 };
+
+// Confirm this exact UPI ID in BharatPe before using it.
+const merchantUpiId = "BHARATPE2B0X0S8N9U72571@unitype";
+const merchantName = "Sai Nakshatra";
 
 try {
   const savedPlan = sessionStorage.getItem(
@@ -234,10 +206,10 @@ try {
     planPrice.textContent = "₹--";
     notice.textContent = "Please select a plan first.";
 
-    paidBtn.disabled = false;
-    paidBtn.textContent = "Choose a Plan";
+    payBtn.disabled = false;
+    payBtn.textContent = "Choose a Plan";
 
-    paidBtn.addEventListener("click", () => {
+    payBtn.addEventListener("click", () => {
       window.location.href = "Plan.html";
     });
 
@@ -251,14 +223,24 @@ try {
     planName.textContent = plan.name;
     planPrice.textContent = "₹" + plan.price;
 
-    paidBtn.disabled = false;
+    payBtn.disabled = false;
+    payBtn.textContent = "Pay ₹" + plan.price + " with UPI";
 
-    paidBtn.addEventListener("click", () => {
+    payBtn.addEventListener("click", () => {
+      const params = new URLSearchParams({
+        pa: merchantUpiId,
+        pn: merchantName,
+        am: String(plan.price),
+        cu: "INR",
+        tn: "Sai Nakshatra " + plan.name
+      });
+
+      const upiUrl = "upi://pay?" + params.toString();
+
       message.textContent =
-        "Payment confirmation is pending. Please contact the merchant with your UPI transaction reference. Your plan will be activated only after the payment is verified.";
+        "Opening your UPI app. Please check the recipient and amount before paying.";
 
-      paidBtn.disabled = true;
-      paidBtn.textContent = "Confirmation Pending";
+      window.location.href = upiUrl;
     });
   }
 
@@ -269,14 +251,14 @@ try {
   planPrice.textContent = "₹--";
   notice.textContent = "Please return and select your plan again.";
 
-  paidBtn.textContent = "Back to Plans";
-  paidBtn.disabled = false;
+  payBtn.textContent = "Back to Plans";
+  payBtn.disabled = false;
 
-  paidBtn.onclick = () => {
+  payBtn.onclick = () => {
     window.location.href = "Plan.html";
   };
 }
 </script>
 
 </body>
-</html>
+    </html>
