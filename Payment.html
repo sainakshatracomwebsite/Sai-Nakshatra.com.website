@@ -1,257 +1,163 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050b20">
-
 <title>Payment | Sai Nakshatra</title>
-
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  min-height: 100vh;
-  padding: 25px 18px;
-  font-family: Georgia, serif;
-  color: white;
-  background:
-    radial-gradient(ellipse at top, #192d55, transparent 60%),
-    linear-gradient(145deg, #030817, #09132c, #05091b);
-}
-
-header {
-  max-width: 900px;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  color: #f0d18a;
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.back {
-  color: #d5dff0;
-  text-decoration: none;
-  font: 14px Arial, sans-serif;
-}
-
-main {
-  max-width: 480px;
-  margin: 45px auto;
-  padding: 30px 22px;
-  border: 1px solid #ffffff25;
-  border-radius: 22px;
-  background: linear-gradient(145deg, #ffffff14, #ffffff05);
-  backdrop-filter: blur(15px);
-  box-shadow: 0 15px 50px #0005;
-}
-
-.heading {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.heading span {
-  color: #e5c67d;
-  font: 11px Arial, sans-serif;
-  letter-spacing: 4px;
-}
-
-h1 {
-  color: #f0d18a;
-  font-size: 32px;
-  font-weight: normal;
-  margin: 15px 0;
-}
-
-.heading p {
-  color: #b9c6dc;
-  font: 14px/1.7 Arial, sans-serif;
-}
-
-.summary {
-  padding: 20px;
-  border: 1px solid #ffffff20;
-  border-radius: 15px;
-  margin-bottom: 22px;
-}
-
-.summary p {
-  color: #aebbd2;
-  font: 13px Arial, sans-serif;
-}
-
-.plan-name {
-  color: white;
-  font-size: 22px;
-  margin: 10px 0;
-}
-
-.price {
-  color: #f0d18a;
-  font: bold 38px Arial, sans-serif;
-}
-
-.notice {
-  color: #c3cee0;
-  font: 13px/1.7 Arial, sans-serif;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-button {
-  width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: 30px;
-  background: linear-gradient(100deg, #d4b36b, #f3dda1);
-  color: #09132c;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-
-.message {
-  color: #f0d18a;
-  text-align: center;
-  font: 13px/1.7 Arial, sans-serif;
-  margin-top: 20px;
-}
-
-footer {
-  text-align: center;
-  color: #8495b2;
-  font: 12px/1.7 Arial, sans-serif;
-  margin-top: 25px;
-}
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;padding:24px 16px;font-family:Georgia,serif;color:#fff;background:radial-gradient(ellipse at top,#192d55,transparent 60%),linear-gradient(145deg,#030817,#09132c,#05091b)}
+header{max-width:900px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{color:#f0d18a;font-size:21px;font-weight:bold}
+.back{color:#d5dff0;text-decoration:none;font:14px Arial,sans-serif}
+main{max-width:490px;margin:34px auto;padding:26px 20px;border:1px solid #ffffff25;border-radius:22px;background:linear-gradient(145deg,#ffffff14,#ffffff05);backdrop-filter:blur(15px);box-shadow:0 15px 50px #0005}
+.heading{text-align:center;margin-bottom:22px}
+.eyebrow{color:#e5c67d;font:11px Arial,sans-serif;letter-spacing:3px}
+.heading h1{color:#f0d18a;font-size:30px;font-weight:normal;margin:12px 0}
+.heading p{color:#b9c6dc;font:14px/1.65 Arial,sans-serif}
+.summary{padding:17px;border:1px solid #ffffff20;border-radius:15px;margin-bottom:18px}
+.summary .label{color:#aebbd2;font:11px Arial,sans-serif;letter-spacing:1px}
+.plan-name{font-size:21px;margin:8px 0}
+.price{color:#f0d18a;font:bold 36px Arial,sans-serif}
+.timer-wrap{text-align:center;margin:18px 0}
+.timer-label{color:#b9c6dc;font:12px Arial,sans-serif}
+.timer{font:bold 27px Arial,sans-serif;color:#f0d18a;margin-top:5px;font-variant-numeric:tabular-nums}
+.timer.expired{color:#ff9b9b}
+.qr-wrap{background:#fff;border-radius:16px;padding:12px;max-width:310px;margin:0 auto 16px}
+.qr-wrap img{display:block;width:100%;height:auto;border-radius:8px}
+.qr-caption{text-align:center;color:#c3cee0;font:12px/1.6 Arial,sans-serif;margin-bottom:16px}
+.upi-id{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:12px;border:1px solid #ffffff25;border-radius:12px;font:12px Arial,sans-serif;overflow-wrap:anywhere;margin-bottom:14px}
+.upi-id span{color:#f0d18a}
+.copy{width:auto;padding:9px 12px;white-space:nowrap;border-radius:20px;font-size:12px}
+button{width:100%;padding:15px;border:0;border-radius:30px;background:linear-gradient(100deg,#d4b36b,#f3dda1);color:#09132c;font-size:15px;font-weight:bold;cursor:pointer;margin-top:9px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.secondary{background:transparent;border:1px solid #d4b36b;color:#f0d18a}
+.notice{color:#c3cee0;font:12px/1.65 Arial,sans-serif;text-align:center;margin:15px 0}
+.message{color:#f0d18a;text-align:center;font:13px/1.6 Arial,sans-serif;margin-top:15px;min-height:20px}
+footer{text-align:center;color:#8495b2;font:11px/1.6 Arial,sans-serif;margin-top:22px}
+@media(max-width:380px){main{padding:22px 15px}.logo{font-size:18px}.heading h1{font-size:27px}}
 </style>
 </head>
-
 <body>
-
 <header>
-  <div class="logo">✦ Sai Nakshatra</div>
-  <a href="Plan.html" class="back">← Back to Plans</a>
+<div class="logo">✦ Sai Nakshatra</div>
+<a href="Plan.html" class="back">← Back to Plans</a>
 </header>
-
 <main>
-
-  <section class="heading">
-    <span>YOUR JOURNEY CONTINUES</span>
-    <h1>UPI Payment</h1>
-    <p>Pay using your preferred UPI application.</p>
-  </section>
-
-  <section class="summary">
-    <p>YOUR SELECTED PLAN</p>
-    <div class="plan-name" id="planName">Loading...</div>
-    <div class="price" id="planPrice">₹--</div>
-  </section>
-
-  <p class="notice" id="notice">
-    Loading payment information...
-  </p>
-
-  <button id="payBtn" disabled>
-    Loading...
-  </button>
-
-  <p class="message" id="message"></p>
-
-  <footer>
-    Your payment will be verified by the merchant.
-    Clicking the button does not confirm payment.
-    Your subscription is activated only after
-    successful payment verification.
-  </footer>
-
+<section class="heading">
+<span class="eyebrow">YOUR JOURNEY CONTINUES</span>
+<h1>UPI Payment</h1>
+<p>Scan the BharatPe QR using any UPI application.</p>
+</section>
+<section class="summary">
+<div class="label">YOUR SELECTED PLAN</div>
+<div class="plan-name" id="planName">Loading...</div>
+<div class="price" id="planPrice">₹--</div>
+</section>
+<div class="timer-wrap">
+<div class="timer-label">PAYMENT WINDOW</div>
+<div class="timer" id="timer">01:00:00</div>
+</div>
+<div class="qr-wrap">
+<img src="bharatpe-qr.png" alt="BharatPe UPI QR code">
+</div>
+<p class="qr-caption">Scan this QR with your UPI app. This is your static merchant QR.</p>
+<div class="upi-id">
+<span id="upiText">BHARATPE2B0X0S8N9U72571@unitype</span>
+<button class="copy" id="copyBtn" type="button">Copy UPI ID</button>
+</div>
+<p class="notice" id="amountNotice">Enter the exact plan amount shown above in your UPI app before paying. The static QR does not lock an amount.</p>
+<button id="payBtn" disabled>Pay via UPI App</button>
+<button id="paidBtn" class="secondary" type="button" disabled>I have completed payment</button>
+<p class="message" id="message" role="status"></p>
+<footer>Do not pay after the timer expires. Payment is not automatically verified on this page, and clicking “I have completed payment” does not activate a subscription. Keep your UPI receipt and transaction reference.</footer>
 </main>
-
 <script>
-const planName = document.getElementById("planName");
-const planPrice = document.getElementById("planPrice");
-const notice = document.getElementById("notice");
-const message = document.getElementById("message");
-const payBtn = document.getElementById("payBtn");
+const MERCHANT_UPI='BHARATPE2B0X0S8N9U72571@unitype';
+const MERCHANT_NAME='Sai Nakshatra';
+const validPlans={Starter:1,Explorer:19,Premium:49,Ultimate:99};
+const $=id=>document.getElementById(id);
+let selectedPlan=null,timerInterval=null;
 
-// Your BharatPe Merchant UPI ID & Name
-const MERCHANT_UPI = "BHARATPE2B0X0S8N9U72571@unitype";
-const MERCHANT_NAME = "Sai Nakshatra";
-
-const validPlans = {
-  Starter: 1,
-  Explorer: 19,
-  Premium: 49,
-  Ultimate: 99
-};
-
-function goToPlans() {
-  window.location.href = "Plan.html";
+function showError(text){
+$('amountNotice').textContent=text;
+$('payBtn').disabled=true;
+$('paidBtn').disabled=true;
+$('timer').textContent='--:--:--';
 }
 
-try {
-  const savedPlan = sessionStorage.getItem("saiNakshatraSelectedPlan");
+try{
+const saved=sessionStorage.getItem('saiNakshatraSelectedPlan');
+if(!saved)throw new Error('No plan selected. Please return to Plans and choose a plan.');
 
-  if (!savedPlan) {
-    throw new Error("No plan selected");
-  }
+const plan=JSON.parse(saved);
 
-  const plan = JSON.parse(savedPlan);
-
-  if (
-    !plan ||
-    typeof plan.name !== "string" ||
-    !Object.prototype.hasOwnProperty.call(validPlans, plan.name) ||
-    validPlans[plan.name] !== plan.price
-  ) {
-    throw new Error("Invalid plan information");
-  }
-
-  // Display plan details
-  planName.textContent = plan.name;
-  planPrice.textContent = "₹" + plan.price;
-
-  notice.textContent =
-    "Click the button below to pay ₹" + plan.price + " via your UPI app.";
-
-  // Generate the automatic UPI deep link with your VPA and locked amount
-  const upiUrl = `upi://pay?pa=${encodeURIComponent(MERCHANT_UPI)}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${plan.price}&cu=INR&tn=${encodeURIComponent("Sai Nakshatra - " + plan.name + " Plan")}`;
-
-  payBtn.disabled = false;
-  payBtn.textContent = `Pay ₹${plan.price} via UPI App`;
-
-  // Trigger app launch on click
-  payBtn.addEventListener("click", function() {
-    window.location.href = upiUrl;
-
-    message.textContent =
-      "Opening your UPI app... After completing payment, please keep your receipt. " +
-      "Your plan will be activated after merchant verification.";
-      
-    payBtn.textContent = "Payment Initiated";
-  });
-
-} catch (error) {
-  console.error(error);
-  notice.textContent = "Unable to load plan details. Please go back and select a plan.";
-  payBtn.textContent = "Invalid Plan";
-  payBtn.disabled = true;
+if(!plan||typeof plan.name!=='string'||!Object.prototype.hasOwnProperty.call(validPlans,plan.name)||validPlans[plan.name]!==Number(plan.price)){
+throw new Error('Invalid plan information. Please select your plan again.');
 }
+
+selectedPlan={name:plan.name,price:validPlans[plan.name]};
+$('planName').textContent=selectedPlan.name;
+$('planPrice').textContent='₹'+selectedPlan.price;
+$('payBtn').textContent='Pay ₹'+selectedPlan.price+' via UPI App';
+$('payBtn').disabled=false;
+$('paidBtn').disabled=false;
+
+const expiryKey='saiNakshatraPaymentExpiry_'+selectedPlan.name;
+let expiry=Number(sessionStorage.getItem(expiryKey));
+
+if(!expiry||!Number.isFinite(expiry)||expiry<Date.now()){
+expiry=Date.now()+60*60*1000;
+sessionStorage.setItem(expiryKey,String(expiry));
+}
+
+function tick(){
+const remaining=Math.max(0,expiry-Date.now());
+const total=Math.floor(remaining/1000);
+const h=String(Math.floor(total/3600)).padStart(2,'0');
+const m=String(Math.floor((total%3600)/60)).padStart(2,'0');
+const s=String(total%60).padStart(2,'0');
+$('timer').textContent=`${h}:${m}:${s}`;
+
+if(remaining<=0){
+clearInterval(timerInterval);
+$('timer').classList.add('expired');
+$('payBtn').disabled=true;
+$('paidBtn').disabled=true;
+$('message').textContent='Payment window expired. Return to Plans to start again.';
+}
+}
+
+tick();
+timerInterval=setInterval(tick,1000);
+
+const upiUrl='upi://pay?pa='+encodeURIComponent(MERCHANT_UPI)+'&pn='+encodeURIComponent(MERCHANT_NAME)+'&am='+selectedPlan.price+'&cu=INR&tn='+encodeURIComponent('Sai Nakshatra - '+selectedPlan.name+' Plan');
+
+$('payBtn').addEventListener('click',()=>{
+if(Date.now()>=expiry)return;
+$('message').textContent='Opening your UPI app. Confirm the recipient and amount before paying.';
+window.location.href=upiUrl;
+});
+
+$('paidBtn').addEventListener('click',()=>{
+$('message').textContent='Thanks. This page cannot verify the payment yet, so your subscription has not been activated. Keep your UPI transaction reference.';
+});
+
+}catch(e){
+console.error(e);
+showError(e.message);
+}
+
+$('copyBtn').addEventListener('click',async()=>{
+try{
+await navigator.clipboard.writeText(MERCHANT_UPI);
+$('copyBtn').textContent='Copied!';
+}catch(e){
+$('message').textContent='Copy unavailable. You can select the UPI ID above manually.';
+}
+});
 </script>
-
 </body>
 </html>
