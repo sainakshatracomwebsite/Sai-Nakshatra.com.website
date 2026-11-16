@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -249,6 +248,10 @@ const payBtn = document.getElementById("payBtn");
 const qrSection = document.getElementById("qrSection");
 const qrImage = document.getElementById("qrImage");
 
+// Your BharatPe Merchant UPI ID & Name
+const MERCHANT_UPI = "BHARATPE2B0X0S8N9U72571@unitype";
+const MERCHANT_NAME = "Sai Nakshatra";
+
 const validPlans = {
   Starter: 1,
   Explorer: 19,
@@ -261,10 +264,7 @@ function goToPlans() {
 }
 
 try {
-
-  const savedPlan = sessionStorage.getItem(
-    "saiNakshatraSelectedPlan"
-  );
+  const savedPlan = sessionStorage.getItem("saiNakshatraSelectedPlan");
 
   if (!savedPlan) {
     throw new Error("No plan selected");
@@ -275,63 +275,48 @@ try {
   if (
     !plan ||
     typeof plan.name !== "string" ||
-    !Object.prototype.hasOwnProperty.call(
-      validPlans,
-      plan.name
-    ) ||
+    !Object.prototype.hasOwnProperty.call(validPlans, plan.name) ||
     validPlans[plan.name] !== plan.price
   ) {
     throw new Error("Invalid plan information");
   }
 
+  // Display plan details
   planName.textContent = plan.name;
   planPrice.textContent = "₹" + plan.price;
 
   qrSection.classList.remove("hidden");
 
   notice.textContent =
-    "Please scan the QR code and pay ₹" +
-    plan.price + " for your selected plan.";
+    "Scan the QR code or click the button below to pay ₹" + plan.price + " via your UPI app.";
+
+  // Generate the automatic UPI deep link with your VPA and locked amount
+  const upiUrl = `upi://pay?pa=${encodeURIComponent(MERCHANT_UPI)}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${plan.price}&cu=INR&tn=${encodeURIComponent("Sai Nakshatra - " + plan.name + " Plan")}`;
 
   payBtn.disabled = false;
-  payBtn.textContent = "I Have Completed Payment";
+  payBtn.textContent = `Pay ₹${plan.price} via UPI App`;
+
+  // Trigger app launch on click
+  payBtn.addEventListener("click", function() {
+    window.location.href = upiUrl;
+
+    message.textContent =
+      "Opening your UPI app... After completing payment, please keep your receipt. " +
+      "Your plan will be activated after merchant verification.";
+      
+    payBtn.textContent = "Payment Initiated";
+  });
 
   qrImage.onerror = function() {
     qrImage.classList.add("hidden");
-
-    notice.textContent =
-      "QR image could not be loaded. Please contact the merchant.";
-
-    payBtn.disabled = true;
+    notice.textContent = "QR image could not be loaded. Please use the payment button above.";
   };
 
-  payBtn.addEventListener("click", function() {
-
-    message.textContent =
-      "Your payment is awaiting merchant verification. " +
-      "Please keep your payment receipt. " +
-      "Your plan will activate after the merchant confirms payment.";
-
-    payBtn.textContent = "Verification Pending";
-    payBtn.disabled = true;
-
-  });
-
 } catch (error) {
-
-  console.error("Payment page error:", error);
-
-  planName.textContent = "No valid plan selected";
-  planPrice.textContent = "₹--";
-
-  notice.textContent =
-    "Please select a valid plan first.";
-
-  payBtn.textContent = "Choose a Plan";
-  payBtn.disabled = false;
-
-  payBtn.addEventListener("click", goToPlans);
-
+  console.error(error);
+  notice.textContent = "Unable to load plan details. Please go back and select a plan.";
+  payBtn.textContent = "Invalid Plan";
+  payBtn.disabled = true;
 }
 </script>
 
