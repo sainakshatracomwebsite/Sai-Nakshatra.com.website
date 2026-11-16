@@ -101,37 +101,6 @@ h1 {
   font: bold 38px Arial, sans-serif;
 }
 
-.qr-section {
-  text-align: center;
-  padding: 20px;
-  border: 1px solid #ffffff20;
-  border-radius: 15px;
-  margin-bottom: 20px;
-}
-
-.qr-section h2 {
-  color: #f0d18a;
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-
-.qr-section p {
-  color: #b9c6dc;
-  font: 13px/1.7 Arial, sans-serif;
-  margin-bottom: 15px;
-}
-
-.qr-image {
-  display: block;
-  width: 260px;
-  max-width: 100%;
-  height: auto;
-  margin: auto;
-  background: white;
-  padding: 8px;
-  border-radius: 12px;
-}
-
 .notice {
   color: #c3cee0;
   font: 13px/1.7 Arial, sans-serif;
@@ -169,10 +138,6 @@ footer {
   font: 12px/1.7 Arial, sans-serif;
   margin-top: 25px;
 }
-
-.hidden {
-  display: none;
-}
 </style>
 </head>
 
@@ -195,29 +160,6 @@ footer {
     <p>YOUR SELECTED PLAN</p>
     <div class="plan-name" id="planName">Loading...</div>
     <div class="price" id="planPrice">₹--</div>
-  </section>
-
-  <section class="qr-section hidden" id="qrSection">
-
-    <h2>Scan & Pay</h2>
-
-    <p>
-      Scan this official BharatPe QR code
-      using any supported UPI application.
-    </p>
-
-    <img
-      src="Screenshot_20261103-235122.png"
-      alt="Sai Nakshatra BharatPe payment QR code"
-      class="qr-image"
-      id="qrImage"
-    >
-
-    <p style="margin-top:15px">
-      Enter the exact amount shown above.
-      Check the recipient name before paying.
-    </p>
-
   </section>
 
   <p class="notice" id="notice">
@@ -245,8 +187,6 @@ const planPrice = document.getElementById("planPrice");
 const notice = document.getElementById("notice");
 const message = document.getElementById("message");
 const payBtn = document.getElementById("payBtn");
-const qrSection = document.getElementById("qrSection");
-const qrImage = document.getElementById("qrImage");
 
 // Your BharatPe Merchant UPI ID & Name
 const MERCHANT_UPI = "BHARATPE2B0X0S8N9U72571@unitype";
@@ -285,10 +225,8 @@ try {
   planName.textContent = plan.name;
   planPrice.textContent = "₹" + plan.price;
 
-  qrSection.classList.remove("hidden");
-
   notice.textContent =
-    "Scan the QR code or click the button below to pay ₹" + plan.price + " via your UPI app.";
+    "Click the button below to pay ₹" + plan.price + " via your UPI app.";
 
   // Generate the automatic UPI deep link with your VPA and locked amount
   const upiUrl = `upi://pay?pa=${encodeURIComponent(MERCHANT_UPI)}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${plan.price}&cu=INR&tn=${encodeURIComponent("Sai Nakshatra - " + plan.name + " Plan")}`;
@@ -306,11 +244,6 @@ try {
       
     payBtn.textContent = "Payment Initiated";
   });
-
-  qrImage.onerror = function() {
-    qrImage.classList.add("hidden");
-    notice.textContent = "QR image could not be loaded. Please use the payment button above.";
-  };
 
 } catch (error) {
   console.error(error);
