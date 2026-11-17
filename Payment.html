@@ -8,6 +8,9 @@
 
 <title>Payment | Sai Nakshatra</title>
 
+<!-- QR Code Generator -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <style>
 * {
   margin: 0;
@@ -158,17 +161,20 @@ button:disabled {
 
 .qr-container {
   background: white;
-  padding: 12px;
+  padding: 15px;
   border-radius: 16px;
-  max-width: 330px;
+  max-width: 290px;
+  min-height: 280px;
   margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.qr-container img {
+#qrCode img {
   display: block;
-  width: 100%;
+  max-width: 100%;
   height: auto;
-  border-radius: 8px;
 }
 
 .qr-caption {
@@ -176,6 +182,13 @@ button:disabled {
   font: 13px/1.7 Arial, sans-serif;
   text-align: center;
   margin: 16px 0;
+}
+
+.payment-amount {
+  color: #f0d18a;
+  font: bold 23px Arial, sans-serif;
+  text-align: center;
+  margin: 12px 0;
 }
 
 .secondary {
@@ -219,7 +232,7 @@ footer {
   <section class="heading">
     <span>YOUR JOURNEY CONTINUES</span>
     <h1>Scan & Pay</h1>
-    <p>Generate your payment QR and scan it using another device.</p>
+    <p>Generate your payment QR and scan it using any UPI application.</p>
   </section>
 
   <section class="summary">
@@ -243,16 +256,16 @@ footer {
       <div class="timer" id="timer">01:00:00</div>
     </div>
 
+    <div class="payment-amount" id="qrAmount"></div>
+
     <div class="qr-container">
-      <img
-        src="Screenshot_20261103-235122.png"
-        alt="Sai Nakshatra BharatPe QR Code"
-      >
+      <div id="qrCode"></div>
     </div>
 
     <p class="qr-caption">
       Scan this QR code using any UPI application.
-      Enter the exact amount shown above before paying.
+      The payment amount is already included.
+      Please verify the recipient and amount before paying.
     </p>
 
     <button class="secondary" id="paidBtn">
@@ -264,14 +277,15 @@ footer {
   <p class="message" id="message"></p>
 
   <footer>
-    Your payment will be verified before subscription activation.
-    Clicking the payment button does not confirm payment.
+    Your payment must be verified before subscription activation.
+    Generating a QR code does not confirm payment.
   </footer>
 
 </main>
 
 <script>
 
+// Website elements
 const planName = document.getElementById("planName");
 const planPrice = document.getElementById("planPrice");
 const notice = document.getElementById("notice");
@@ -280,7 +294,16 @@ const generateBtn = document.getElementById("generateBtn");
 const qrSection = document.getElementById("qrSection");
 const timer = document.getElementById("timer");
 const paidBtn = document.getElementById("paidBtn");
+const qrCode = document.getElementById("qrCode");
+const qrAmount = document.getElementById("qrAmount");
 
+
+// BharatPe merchant information
+const MERCHANT_UPI = "BHARATPE2B0X0S8N9U72571@unitype";
+const MERCHANT_NAME = "Sai Nakshatra";
+
+
+// Valid subscription plans
 const validPlans = {
   Starter: 1,
   Explorer: 19,
@@ -288,10 +311,13 @@ const validPlans = {
   Ultimate: 99
 };
 
+
 let selectedPlan = null;
 let expiryTime = null;
 let timerInterval = null;
 
+
+// Load selected plan
 try {
 
   const savedPlan = sessionStorage.getItem(
@@ -324,7 +350,7 @@ try {
   notice.textContent =
     "Your selected plan costs ₹" +
     selectedPlan.price +
-    ". Click below to generate your payment QR.";
+    ". Click below to generate your fixed-amount payment QR.";
 
   generateBtn.disabled = false;
   generateBtn.textContent = "Generate Payment QR";
@@ -342,11 +368,61 @@ try {
 }
 
 
-// Generate QR and start timer
+// Generate dynamic fixed-amount QR
 generateBtn.addEventListener("click", function() {
 
   if (!selectedPlan || expiryTime) return;
 
+  // Check QR library
+  if (typeof QRCode === "undefined") {
+
+    message.textContent =
+      "QR generator could not load. Please refresh and try again.";
+
+    return;
+  }
+
+  // Create UPI payment URL with fixed amount
+  const upiUrl =
+    "upi://pay" +
+    "?pa=" + encodeURIComponent(MERCHANT_UPI) +
+    "&pn=" + encodeURIComponent(MERCHANT_NAME) +
+    "&am=" + selectedPlan.price.toFixed(2) +
+    "&cu=INR" +
+    "&tn=" + encodeURIComponent(
+      "Sai Nakshatra - " + selectedPlan.name + " Plan"
+    );
+
+  // Clear previous QR
+  qrCode.innerHTML = "";
+
+  // Generate QR
+  try {
+
+    new QRCode(qrCode, {
+      text: upiUrl,
+      width: 250,
+      height: 250,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      "Unable to generate QR. Please try again.";
+
+    return;
+  }
+
+  // Display amount
+  qrAmount.textContent =
+    "Amount to Pay: ₹" + selectedPlan.price;
+
+  // Start one-hour countdown
   expiryTime = Date.now() + (60 * 60 * 1000);
 
   qrSection.classList.add("show");
@@ -354,8 +430,11 @@ generateBtn.addEventListener("click", function() {
   generateBtn.disabled = true;
   generateBtn.textContent = "QR Generated";
 
+  notice.textContent =
+    "Your payment QR is ready. Scan and pay the exact amount.";
+
   message.textContent =
-    "Your payment QR is ready. Please complete payment within one hour.";
+    "Please complete your payment within one hour.";
 
   updateTimer();
 
@@ -367,7 +446,10 @@ generateBtn.addEventListener("click", function() {
 // Countdown timer
 function updateTimer() {
 
-  const remaining = Math.max(0, expiryTime - Date.now());
+  const remaining = Math.max(
+    0,
+    expiryTime - Date.now()
+  );
 
   const totalSeconds = Math.floor(remaining / 1000);
 
@@ -402,7 +484,7 @@ function updateTimer() {
 }
 
 
-// Payment status message
+// Customer clicks completed payment
 paidBtn.addEventListener("click", function() {
 
   if (!expiryTime || Date.now() >= expiryTime) return;
