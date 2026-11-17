@@ -219,7 +219,7 @@ footer {
   <section class="heading">
     <span>YOUR JOURNEY CONTINUES</span>
     <h1>Scan & Pay</h1>
-    <p>Scan the BharatPe QR code using any UPI application.</p>
+    <p>Generate your payment QR and scan it using another device.</p>
   </section>
 
   <section class="summary">
@@ -231,6 +231,10 @@ footer {
   <p class="notice" id="notice">
     Loading payment information...
   </p>
+
+  <button id="generateBtn" disabled>
+    Loading...
+  </button>
 
   <section class="qr-section" id="qrSection">
 
@@ -272,6 +276,7 @@ const planName = document.getElementById("planName");
 const planPrice = document.getElementById("planPrice");
 const notice = document.getElementById("notice");
 const message = document.getElementById("message");
+const generateBtn = document.getElementById("generateBtn");
 const qrSection = document.getElementById("qrSection");
 const timer = document.getElementById("timer");
 const paidBtn = document.getElementById("paidBtn");
@@ -317,19 +322,12 @@ try {
   planPrice.textContent = "₹" + selectedPlan.price;
 
   notice.textContent =
-    "Please scan the QR code and pay ₹" +
+    "Your selected plan costs ₹" +
     selectedPlan.price +
-    " to continue your subscription.";
+    ". Click below to generate your payment QR.";
 
-  // Show QR automatically
-  qrSection.classList.add("show");
-
-  // Start one-hour countdown automatically
-  expiryTime = Date.now() + (60 * 60 * 1000);
-
-  updateTimer();
-
-  timerInterval = setInterval(updateTimer, 1000);
+  generateBtn.disabled = false;
+  generateBtn.textContent = "Generate Payment QR";
 
 } catch (error) {
 
@@ -338,11 +336,32 @@ try {
   notice.textContent =
     "Unable to load your plan. Please go back and select a plan.";
 
-  paidBtn.disabled = true;
-
-  message.textContent = "Invalid plan information.";
+  generateBtn.textContent = "Invalid Plan";
+  generateBtn.disabled = true;
 
 }
+
+
+// Generate QR and start timer
+generateBtn.addEventListener("click", function() {
+
+  if (!selectedPlan || expiryTime) return;
+
+  expiryTime = Date.now() + (60 * 60 * 1000);
+
+  qrSection.classList.add("show");
+
+  generateBtn.disabled = true;
+  generateBtn.textContent = "QR Generated";
+
+  message.textContent =
+    "Your payment QR is ready. Please complete payment within one hour.";
+
+  updateTimer();
+
+  timerInterval = setInterval(updateTimer, 1000);
+
+});
 
 
 // Countdown timer
