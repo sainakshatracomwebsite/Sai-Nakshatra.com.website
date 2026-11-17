@@ -218,8 +218,8 @@ footer {
 
   <section class="heading">
     <span>YOUR JOURNEY CONTINUES</span>
-    <h1>UPI Payment</h1>
-    <p>Pay using your preferred UPI application.</p>
+    <h1>Scan & Pay</h1>
+    <p>Scan the BharatPe QR code using any UPI application.</p>
   </section>
 
   <section class="summary">
@@ -231,10 +231,6 @@ footer {
   <p class="notice" id="notice">
     Loading payment information...
   </p>
-
-  <button id="generateBtn" disabled>
-    Loading...
-  </button>
 
   <section class="qr-section" id="qrSection">
 
@@ -255,10 +251,6 @@ footer {
       Enter the exact amount shown above before paying.
     </p>
 
-    <button id="upiBtn">
-      Pay via UPI App
-    </button>
-
     <button class="secondary" id="paidBtn">
       I have completed payment
     </button>
@@ -275,16 +267,14 @@ footer {
 </main>
 
 <script>
+
 const planName = document.getElementById("planName");
 const planPrice = document.getElementById("planPrice");
 const notice = document.getElementById("notice");
 const message = document.getElementById("message");
-const generateBtn = document.getElementById("generateBtn");
 const qrSection = document.getElementById("qrSection");
 const timer = document.getElementById("timer");
-
-const MERCHANT_UPI = "BHARATPE2B0X0S8N9U72571@unitype";
-const MERCHANT_NAME = "Sai Nakshatra";
+const paidBtn = document.getElementById("paidBtn");
 
 const validPlans = {
   Starter: 1,
@@ -327,12 +317,19 @@ try {
   planPrice.textContent = "₹" + selectedPlan.price;
 
   notice.textContent =
-    "Your selected plan costs ₹" +
+    "Please scan the QR code and pay ₹" +
     selectedPlan.price +
-    ". Generate your payment QR when you're ready.";
+    " to continue your subscription.";
 
-  generateBtn.disabled = false;
-  generateBtn.textContent = "Generate Payment QR";
+  // Show QR automatically
+  qrSection.classList.add("show");
+
+  // Start one-hour countdown automatically
+  expiryTime = Date.now() + (60 * 60 * 1000);
+
+  updateTimer();
+
+  timerInterval = setInterval(updateTimer, 1000);
 
 } catch (error) {
 
@@ -341,32 +338,11 @@ try {
   notice.textContent =
     "Unable to load your plan. Please go back and select a plan.";
 
-  generateBtn.textContent = "Invalid Plan";
-  generateBtn.disabled = true;
+  paidBtn.disabled = true;
+
+  message.textContent = "Invalid plan information.";
 
 }
-
-
-// Generate QR and start timer only after clicking
-generateBtn.addEventListener("click", function() {
-
-  if (!selectedPlan || expiryTime) return;
-
-  expiryTime = Date.now() + (60 * 60 * 1000);
-
-  qrSection.classList.add("show");
-
-  generateBtn.disabled = true;
-  generateBtn.textContent = "QR Generated";
-
-  message.textContent =
-    "Your payment QR is ready. Please complete payment within one hour.";
-
-  updateTimer();
-
-  timerInterval = setInterval(updateTimer, 1000);
-
-});
 
 
 // Countdown timer
@@ -400,38 +376,15 @@ function updateTimer() {
     message.textContent =
       "Payment window expired. Please go back and select your plan again.";
 
-    document.getElementById("upiBtn").disabled = true;
-    document.getElementById("paidBtn").disabled = true;
+    paidBtn.disabled = true;
 
   }
 
 }
 
 
-// Open UPI application
-document.getElementById("upiBtn").addEventListener("click", function() {
-
-  if (!expiryTime || Date.now() >= expiryTime) return;
-
-  const upiUrl =
-    "upi://pay?pa=" + encodeURIComponent(MERCHANT_UPI) +
-    "&pn=" + encodeURIComponent(MERCHANT_NAME) +
-    "&am=" + selectedPlan.price +
-    "&cu=INR" +
-    "&tn=" + encodeURIComponent(
-      "Sai Nakshatra - " + selectedPlan.name + " Plan"
-    );
-
-  message.textContent =
-    "Opening your UPI application. Please verify the recipient and amount.";
-
-  window.location.href = upiUrl;
-
-});
-
-
 // Payment status message
-document.getElementById("paidBtn").addEventListener("click", function() {
+paidBtn.addEventListener("click", function() {
 
   if (!expiryTime || Date.now() >= expiryTime) return;
 
