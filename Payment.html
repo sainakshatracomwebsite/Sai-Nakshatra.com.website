@@ -196,7 +196,8 @@ button:disabled {
   align-items: center;
 }
 
-#qrCode img {
+#qrCode img,
+#qrCode canvas {
   display: block;
   max-width: 100%;
   height: auto;
@@ -228,6 +229,22 @@ button:disabled {
   text-align: center;
   font: 13px/1.7 Arial, sans-serif;
   margin-top: 20px;
+  overflow-wrap: anywhere;
+}
+
+.status {
+  display: none;
+  text-align: center;
+  padding: 17px;
+  margin-top: 20px;
+  border: 1px solid #d4b36b55;
+  border-radius: 14px;
+  color: #f0d18a;
+  font: 14px/1.7 Arial, sans-serif;
+}
+
+.status.show {
+  display: block;
 }
 
 footer {
@@ -312,6 +329,11 @@ footer {
 
   </section>
 
+  <div class="status" id="statusBox">
+    <strong>Payment verification requested</strong>
+    <p>Please wait while the administrator checks your payment.</p>
+  </div>
+
   <p class="message" id="message"></p>
 
   <footer>
@@ -323,7 +345,10 @@ footer {
 
 <script>
 
-// Website elements
+// =====================================
+// WEBSITE ELEMENTS
+// =====================================
+
 const planName = document.getElementById("planName");
 const planPrice = document.getElementById("planPrice");
 const notice = document.getElementById("notice");
@@ -335,22 +360,19 @@ const paidBtn = document.getElementById("paidBtn");
 const qrCode = document.getElementById("qrCode");
 const qrAmount = document.getElementById("qrAmount");
 const customerName = document.getElementById("customerName");
+const statusBox = document.getElementById("statusBox");
 
-
-// YOUR WHATSAPP NUMBER
-// Replace with your country code + phone number.
-// India example: 91XXXXXXXXXX
-// Do not use +, spaces or dashes.
+// =====================================
+// PAYMENT SETTINGS
+// =====================================
 
 const ADMIN_WHATSAPP = "919110159549";
 
-
-// BharatPe merchant information
 const MERCHANT_UPI = "BHARATPE2B0X0S8N9U72571@unitype";
 const MERCHANT_NAME = "Sai Nakshatra";
 
+const STORAGE_KEY = "saiNakshatraPaymentSession";
 
-// Valid subscription plans
 const validPlans = {
   Starter: 1,
   Explorer: 19,
@@ -359,11 +381,44 @@ const validPlans = {
 };
 
 let selectedPlan = null;
-let expiryTime = null;
+let paymentSession = null;
 let timerInterval = null;
 
+// =====================================
+// SAFE STORAGE
+// =====================================
 
-// Load selected plan
+function saveSession() {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(paymentSession)
+    );
+  } catch (error) {
+    console.error("Could not save payment session", error);
+    message.textContent =
+      "Browser storage is unavailable. Your QR may not be saved.";
+  }
+}
+
+function loadSession() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (!saved) return null;
+
+    return JSON.parse(saved);
+
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+// =====================================
+// LOAD SELECTED PLAN
+// =====================================
+
 try {
 
   const savedPlan = sessionStorage.getItem(
@@ -396,7 +451,7 @@ try {
   notice.textContent =
     "Your selected plan costs ₹" +
     selectedPlan.price +
-    ". Click below to generate your fixed-amount payment QR.";
+    ". Generate your payment QR.";
 
   generateBtn.disabled = false;
   generateBtn.textContent = "Generate Payment QR";
@@ -413,11 +468,86 @@ try {
 
 }
 
+// =====================================
+// GENERATE QR CONTENT
+// =====================================
 
-// Generate dynamic fixed-amount QR
+function makeUpiUrl(plan, name) {
+
+  return (
+    "upi://pay" +
+    "?pa=" + encodeURIComponent(MERCHANT_UPI) +
+    "&pn=" + encodeURIComponent(MERCHANT_NAME) +
+    "&am=" + plan.price.toFixed(2) +
+    "&cu=INR" +
+    "&tn=" + encodeURIComponent(
+      "Sai Nakshatra - " + plan.name + " Plan"
+    )
+  );
+
+}
+
+// =====================================
+// DISPLAY SAVED QR
+// =====================================
+
+function renderQR() {
+
+  if (!paymentSession) return;
+
+  if (typeof QRCode === "undefined") {
+
+    message.textContent =
+      "QR generator could not load. Check your internet connection.";
+
+    return;
+  }
+
+  qrCode.innerHTML = "";
+
+  new QRCode(qrCode, {
+    text: paymentSession.upiUrl,
+    width: 250,
+    height: 250,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  qrAmount.textContent =
+    "Amount to Pay: ₹" + paymentSession.price;
+
+  qrSection.classList.add("show");
+
+  customerName.value = paymentSession.customerName;
+  customerName.readOnly = true;
+
+  generateBtn.disabled = true;
+  generateBtn.textContent = "QR Generated";
+
+  notice.textContent =
+    "Your saved payment QR is ready.";
+
+  if (paymentSession.notificationRequested) {
+    statusBox.classList.add("show");
+    paidBtn.textContent = "Open WhatsApp Again";
+  }
+
+  updateTimer();
+
+  if (!timerInterval) {
+    timerInterval = setInterval(updateTimer, 1000);
+  }
+
+}
+
+// =====================================
+// GENERATE PAYMENT QR
+// =====================================
+
 generateBtn.addEventListener("click", function() {
 
-  if (!selectedPlan || expiryTime) return;
+  if (!selectedPlan || paymentSession) return;
 
   const name = customerName.value.trim();
 
@@ -433,144 +563,176 @@ generateBtn.addEventListener("click", function() {
     return;
   }
 
-  const upiUrl =
-    "upi://pay" +
-    "?pa=" + encodeURIComponent(MERCHANT_UPI) +
-    "&pn=" + encodeURIComponent(MERCHANT_NAME) +
-    "&am=" + selectedPlan.price.toFixed(2) +
-    "&cu=INR" +
-    "&tn=" + encodeURIComponent(
-      "Sai Nakshatra - " + selectedPlan.name + " Plan"
-    );
+  const upiUrl = makeUpiUrl(selectedPlan, name);
 
-  qrCode.innerHTML = "";
+  paymentSession = {
+    customerName: name,
+    planName: selectedPlan.name,
+    price: selectedPlan.price,
+    upiUrl: upiUrl,
+    createdAt: Date.now(),
+    expiryTime: Date.now() + (60 * 60 * 1000),
+    notificationRequested: false
+  };
 
-  try {
+  saveSession();
 
-    new QRCode(qrCode, {
-      text: upiUrl,
-      width: 250,
-      height: 250,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
-    message.textContent =
-      "Unable to generate QR. Please try again.";
-
-    return;
-  }
-
-  qrAmount.textContent =
-    "Amount to Pay: ₹" + selectedPlan.price;
-
-  expiryTime = Date.now() + (60 * 60 * 1000);
-
-  qrSection.classList.add("show");
-
-  generateBtn.disabled = true;
-  generateBtn.textContent = "QR Generated";
-
-  notice.textContent =
-    "Your payment QR is ready. Scan and pay the exact amount.";
+  renderQR();
 
   message.textContent =
-    "Please complete your payment within one hour.";
-
-  updateTimer();
-
-  timerInterval = setInterval(updateTimer, 1000);
+    "Your payment QR has been generated.";
 
 });
 
+// =====================================
+// TIMER - DOES NOT RESTART ON RELOAD
+// =====================================
 
-// Countdown timer
 function updateTimer() {
 
-  const remaining = Math.max(
-    0,
-    expiryTime - Date.now()
-  );
+  if (!paymentSession) return;
 
-  const totalSeconds = Math.floor(remaining / 1000);
-
-  const hours = String(
-    Math.floor(totalSeconds / 3600)
-  ).padStart(2, "0");
-
-  const minutes = String(
-    Math.floor((totalSeconds % 3600) / 60)
-  ).padStart(2, "0");
-
-  const seconds = String(
-    totalSeconds % 60
-  ).padStart(2, "0");
-
-  timer.textContent =
-    hours + ":" + minutes + ":" + seconds;
+  const remaining =
+    paymentSession.expiryTime - Date.now();
 
   if (remaining <= 0) {
 
-    clearInterval(timerInterval);
-
+    timer.textContent = "00:00:00";
     timer.classList.add("expired");
 
-    message.textContent =
-      "Payment window expired. Please go back and select your plan again.";
-
     paidBtn.disabled = true;
+
+    message.textContent =
+      "Your payment QR has expired. Please contact support.";
+
+    clearInterval(timerInterval);
+    timerInterval = null;
+
+    return;
   }
+
+  const hours = Math.floor(remaining / 3600000);
+
+  const minutes = Math.floor(
+    (remaining % 3600000) / 60000
+  );
+
+  const seconds = Math.floor(
+    (remaining % 60000) / 1000
+  );
+
+  timer.textContent =
+    String(hours).padStart(2, "0") + ":" +
+    String(minutes).padStart(2, "0") + ":" +
+    String(seconds).padStart(2, "0");
+
 }
 
+// =====================================
+// WHATSAPP PAYMENT NOTIFICATION
+// =====================================
 
-// Customer clicks completed payment
 paidBtn.addEventListener("click", function() {
 
-  if (!expiryTime || Date.now() >= expiryTime) {
+  if (!paymentSession) return;
+
+  if (Date.now() >= paymentSession.expiryTime) {
+    message.textContent = "This payment QR has expired.";
     return;
   }
 
-  const name = customerName.value.trim();
-
-  if (!name) {
-    message.textContent = "Please enter your name.";
-    customerName.focus();
-    return;
-  }
-
-  if (
-    !/^\d{10,15}$/.test(ADMIN_WHATSAPP) ||
-    ADMIN_WHATSAPP.includes("X")
-  ) {
-    message.textContent =
-      "WhatsApp number has not been configured yet.";
-    return;
-  }
-
-  // WhatsApp message contains only name, plan and amount
-  const whatsappMessage =
-    "Payment notification\n" +
-    "Name: " + name + "\n" +
-    "Plan: " + selectedPlan.name + "\n" +
-    "Amount: ₹" + selectedPlan.price;
+  const text =
+    "Payment verification request\n\n" +
+    "Name: " + paymentSession.customerName + "\n" +
+    "Plan: " + paymentSession.planName + "\n" +
+    "Amount: ₹" + paymentSession.price + "\n\n" +
+    "Please verify this payment in your UPI account.";
 
   const whatsappURL =
     "https://wa.me/" +
     ADMIN_WHATSAPP +
     "?text=" +
-    encodeURIComponent(whatsappMessage);
+    encodeURIComponent(text);
+
+  paymentSession.notificationRequested = true;
+
+  saveSession();
+
+  statusBox.classList.add("show");
+
+  paidBtn.textContent = "Open WhatsApp Again";
 
   message.textContent =
-    "Opening WhatsApp. Please send the message to notify us.";
+    "WhatsApp will open. Send the message after completing payment.";
 
-  window.location.href = whatsappURL;
+  window.open(whatsappURL, "_blank");
 
 });
+
+// =====================================
+// RESTORE QR WHEN PAGE OPENS AGAIN
+// =====================================
+
+function restorePayment() {
+
+  const saved = loadSession();
+
+  if (!saved) return;
+
+  if (
+    typeof saved.customerName !== "string" ||
+    !Object.prototype.hasOwnProperty.call(validPlans, saved.planName) ||
+    Number(saved.price) !== validPlans[saved.planName] ||
+    typeof saved.upiUrl !== "string" ||
+    !Number.isFinite(saved.expiryTime) ||
+    !Number.isFinite(saved.createdAt)
+  ) {
+    localStorage.removeItem(STORAGE_KEY);
+    return;
+  }
+
+  paymentSession = saved;
+
+  selectedPlan = {
+    name: saved.planName,
+    price: saved.price
+  };
+
+  planName.textContent = saved.planName;
+  planPrice.textContent = "₹" + saved.price;
+
+  generateBtn.disabled = true;
+
+  if (Date.now() >= saved.expiryTime) {
+    renderQR();
+    return;
+  }
+
+  renderQR();
+
+}
+
+// =====================================
+// UPDATE TIMER WHEN APP RETURNS
+// =====================================
+
+document.addEventListener("visibilitychange", function() {
+
+  if (!document.hidden) {
+    updateTimer();
+  }
+
+});
+
+window.addEventListener("pageshow", function() {
+  updateTimer();
+});
+
+// =====================================
+// START
+// =====================================
+
+restorePayment();
 
 </script>
 
