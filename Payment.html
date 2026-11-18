@@ -8,7 +8,6 @@
 
 <title>Payment | Sai Nakshatra</title>
 
-<!-- QR Code Generator -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
@@ -103,6 +102,32 @@ h1 {
 .price {
   color: #f0d18a;
   font: bold 38px Arial, sans-serif;
+}
+
+.name-label {
+  display: block;
+  color: #e5c67d;
+  font: 13px Arial, sans-serif;
+  margin: 22px 0 9px;
+}
+
+.name-input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ffffff35;
+  border-radius: 10px;
+  background: #ffffff0c;
+  color: white;
+  font-size: 15px;
+  outline: none;
+}
+
+.name-input:focus {
+  border-color: #e2c47e;
+}
+
+.name-input::placeholder {
+  color: #8495b2;
 }
 
 .notice {
@@ -239,6 +264,19 @@ footer {
     <p>YOUR SELECTED PLAN</p>
     <div class="plan-name" id="planName">Loading...</div>
     <div class="price" id="planPrice">₹--</div>
+
+    <label class="name-label" for="customerName">
+      YOUR FULL NAME
+    </label>
+
+    <input
+      type="text"
+      id="customerName"
+      class="name-input"
+      placeholder="Enter your name"
+      maxlength="60"
+      autocomplete="name"
+    >
   </section>
 
   <p class="notice" id="notice">
@@ -296,6 +334,15 @@ const timer = document.getElementById("timer");
 const paidBtn = document.getElementById("paidBtn");
 const qrCode = document.getElementById("qrCode");
 const qrAmount = document.getElementById("qrAmount");
+const customerName = document.getElementById("customerName");
+
+
+// YOUR WHATSAPP NUMBER
+// Replace with your country code + phone number.
+// India example: 91XXXXXXXXXX
+// Do not use +, spaces or dashes.
+
+const ADMIN_WHATSAPP = "91XXXXXXXXXX";
 
 
 // BharatPe merchant information
@@ -310,7 +357,6 @@ const validPlans = {
   Premium: 49,
   Ultimate: 99
 };
-
 
 let selectedPlan = null;
 let expiryTime = null;
@@ -373,16 +419,20 @@ generateBtn.addEventListener("click", function() {
 
   if (!selectedPlan || expiryTime) return;
 
-  // Check QR library
-  if (typeof QRCode === "undefined") {
+  const name = customerName.value.trim();
 
-    message.textContent =
-      "QR generator could not load. Please refresh and try again.";
-
+  if (!name) {
+    message.textContent = "Please enter your name first.";
+    customerName.focus();
     return;
   }
 
-  // Create UPI payment URL with fixed amount
+  if (typeof QRCode === "undefined") {
+    message.textContent =
+      "QR generator could not load. Please refresh and try again.";
+    return;
+  }
+
   const upiUrl =
     "upi://pay" +
     "?pa=" + encodeURIComponent(MERCHANT_UPI) +
@@ -393,10 +443,8 @@ generateBtn.addEventListener("click", function() {
       "Sai Nakshatra - " + selectedPlan.name + " Plan"
     );
 
-  // Clear previous QR
   qrCode.innerHTML = "";
 
-  // Generate QR
   try {
 
     new QRCode(qrCode, {
@@ -418,11 +466,9 @@ generateBtn.addEventListener("click", function() {
     return;
   }
 
-  // Display amount
   qrAmount.textContent =
     "Amount to Pay: ₹" + selectedPlan.price;
 
-  // Start one-hour countdown
   expiryTime = Date.now() + (60 * 60 * 1000);
 
   qrSection.classList.add("show");
@@ -478,19 +524,51 @@ function updateTimer() {
       "Payment window expired. Please go back and select your plan again.";
 
     paidBtn.disabled = true;
-
   }
-
 }
 
 
 // Customer clicks completed payment
 paidBtn.addEventListener("click", function() {
 
-  if (!expiryTime || Date.now() >= expiryTime) return;
+  if (!expiryTime || Date.now() >= expiryTime) {
+    return;
+  }
+
+  const name = customerName.value.trim();
+
+  if (!name) {
+    message.textContent = "Please enter your name.";
+    customerName.focus();
+    return;
+  }
+
+  if (
+    !/^\d{10,15}$/.test(ADMIN_WHATSAPP) ||
+    ADMIN_WHATSAPP.includes("X")
+  ) {
+    message.textContent =
+      "WhatsApp number has not been configured yet.";
+    return;
+  }
+
+  // WhatsApp message contains only name, plan and amount
+  const whatsappMessage =
+    "Payment notification\n" +
+    "Name: " + name + "\n" +
+    "Plan: " + selectedPlan.name + "\n" +
+    "Amount: ₹" + selectedPlan.price;
+
+  const whatsappURL =
+    "https://wa.me/" +
+    ADMIN_WHATSAPP +
+    "?text=" +
+    encodeURIComponent(whatsappMessage);
 
   message.textContent =
-    "Thank you! Payment verification is not connected yet. Your subscription has not been activated.";
+    "Opening WhatsApp. Please send the message to notify us.";
+
+  window.location.href = whatsappURL;
 
 });
 
